@@ -331,6 +331,9 @@ const fakeRequestOK = {
 app.ports.onRequestFinished.send(fakeRequestOK)
 app.ports.onPreFlightRequestFinished.send(fakeRequest)
 
+// setInterval(() => {
+//   app.ports.onRequestFinished.send(fakeRequestOK)
+// }, 2000)
 // app.ports.onRequestFinished.send(fakeRequest)
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
