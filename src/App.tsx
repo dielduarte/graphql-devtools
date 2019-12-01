@@ -1,8 +1,20 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import registerChromeEvents from "./core";
+
+import './core/machine'
+import {CoreContext} from "./core/CoreContext";
 
 function App() {
+  const { current, send } =  useContext(CoreContext)
+  console.log(current.context.preFlightRequestsMap)
+  console.log(current.context.requests)
+
+  useEffect(() => {
+    registerChromeEvents(send);
+  }, [send])
+
   return (
     <div className="App">
       <header className="App-header">
