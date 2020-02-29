@@ -36,3 +36,11 @@ H
 src/core/CoreContext.tsx,3/5/3548606600a6e226d6f6c33757b311596dacc7b7
 D
 src/core/machine.tsx,c/a/cad0f5e22cfc29989779bbe7fd3e6d1d749a1eea
+Q
+!src/core/__fixtures__/requests.ts,2/6/264e097d964bcc2ce929f0732bbb25a3d9269766
+D
+src/@types/Core.d.ts,0/b/0bcb6034af36a105a0e5a975b3fbeaba644bdfe7
+G
+src/@types/globals.d.ts,1/a/1ab81b2e9f3fbf0c51ef2e32d7e405570bba32b7
+C
+src/core/actions.ts,7/4/7412dc39364b9cedf54c2c06c0b49fd420176423
