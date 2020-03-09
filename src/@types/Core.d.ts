@@ -1,54 +1,65 @@
 import { MachineConfig } from 'xstate';
 
 declare global {
-  type HeadersField = { name: String; value: String };
+  type StatusCode = number | 'loading';
 
-  type PostDataField = { mimeType: string; text: string };
+  interface CoreRequest {
+    requestId: string;
+    query: string;
+    variables: AnyObject;
+  }
 
-  type ContentField = { mimeType: string; size: number };
+  interface CoreRequestMetaData {
+    statusCode: StatusCode;
+    timeStamp: {
+      start: number;
+      end?: number;
+    };
+    headers: AnyObject;
+  }
 
-  type TimingsField = {
-    blocked: number;
-    dns: number;
-    ssl: number;
-    connect: number;
-    send: number;
-    wait: number;
-    receive: number;
-  };
+  // The events that the machine handles
+  interface ON_REQUEST {
+    type: 'ON_REQUEST';
+    payload: {
+      request: CoreRequest;
+    };
+  }
 
-  type RequestField = {
-    bodySize: number;
-    cookies: string[];
-    headers: HeadersField[];
-    headersSize: number;
-    httpVersion: string;
-    method: string;
-    postData: PostDataField;
-    querystring: string[];
-    url: string;
-  };
+  interface ON_REQUEST_COMPLETE {
+    type: 'ON_REQUEST_COMPLETE';
+    payload: {
+      requestId: string;
+      statusCode: StatusCode;
+    };
+  }
 
-  type ResponseField = {
-    bodySize: number;
-    content: ContentField;
-    headers: HeadersField[];
-    headersSize: number;
-    httpVersion: string;
-    redirectURL: string;
-    status: number;
-    statusText: string;
-  };
+  interface ON_REQUEST_ERROR {
+    type: 'ON_REQUEST_ERROR';
+    payload: {
+      requestId: string;
+    };
+  }
 
-  type CoreRequest = {
-    request: RequestField;
-    response: ResponseField;
-    serverIPAddress: string;
-    startedDateTime: string;
-    time: number;
-    timings: TimingsField;
-    connection?: string;
-  };
+  interface ON_BEFORE_SEND_HEADERS {
+    type: 'ON_BEFORE_SEND_HEADERS';
+    payload: {
+      requestId: string;
+      requestHeaders: AnyObject;
+    };
+  }
+
+  interface OPEN_REQUEST_DETAILS {
+    type: 'OPEN_REQUEST_DETAILS';
+    payload: {};
+  }
+
+  type CoreEvents =
+    | ON_REQUEST
+    | ON_REQUEST_COMPLETE
+    | ON_REQUEST_ERROR
+    | ON_BEFORE_SEND_HEADERS
+    | OPEN_REQUEST_DETAILS;
 
   interface CoreSchema {
     states: {
@@ -65,20 +76,10 @@ declare global {
     };
   }
 
-// The events that the machine handles
-  type SET_REQUESTS = { type: 'SET_REQUEST', request: CoreRequest }
-
-  type CoreEvents =
-      | { type: 'SET_KNOW_REQUESTS' }
-      | SET_REQUESTS
-      | { type: 'OPEN_REQUEST_DETAILS' };
-
-// The context (extended state) of the machine
   interface CoreContext {
-    requests: Array<CoreRequest> | null,
-    preFlightRequestsMap: { [key: string]: number }
+    requests: Array<CoreRequest>;
+    resquestsMetaDataById: { [key: string]: CoreRequestMetaData };
   }
 
   type CoreMachine = MachineConfig<CoreContext, CoreSchema, CoreEvents>;
-
 }

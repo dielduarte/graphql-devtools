@@ -1,19 +1,18 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import registerChromeEvents from "./core";
+import registerChromeEvents from './core';
 
-import './core/machine'
-import {CoreContext} from "./core/CoreContext";
+import './core/machine';
+import { CoreContext } from './core/CoreContext';
 
 function App() {
-  const { current, send } =  useContext(CoreContext)
-  console.log(current.context.preFlightRequestsMap)
-  console.log(current.context.requests)
+  const { current, send } = useContext(CoreContext);
+  console.log(current.context, ' <<<<<< CONTEXT');
 
   useEffect(() => {
     registerChromeEvents(send);
-  }, [send])
+  }, [send]);
 
   return (
     <div className="App">

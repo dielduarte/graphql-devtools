@@ -1,91 +1,42 @@
 import { assign } from 'xstate';
-import { pipe, cond, equals, T, prop, compose, not, propOr } from 'ramda'
+import * as immutable from 'object-path-immutable';
+import { findQueryName } from './_utils/query';
 
-const isNormalRequest = propOr(false, 'connection')
+export const addRequest = assign<CoreContext, CoreEvents>({
+  requests: (context, event) => [...context.requests, event.payload.request],
+  resquestsMetaDataById: (context, event) => {
+    const queryName = findQueryName(event.payload.request);
 
-const removeQueryAndMutationKeyWords = (request: CoreRequest) => {
-    const text = JSON.parse(request.request.postData.text)
-    return text.query.replace('query', '').replace('mutation', '')
-}
+    return immutable.set(context.resquestsMetaDataById, event.payload.request.requestId, {
+      queryName,
+      statusCode: 'loading',
+      timeStamp: {
+        start: new Date().getTime()
+      }
+    });
+  }
+});
 
-const findFirstParenthesesIndex = (query: string) => {
-    return {
-        index: query.indexOf('('),
-        query
-    }
-}
+export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
+  resquestsMetaDataById: (context, event) => {
+    const { requestId, statusCode } = event.payload;
 
-const getQueryName = ({ index, query }: {index: number, query: string}) => {
-    return query.substring(0, index).trim()
-}
+    return (immutable.update(context.resquestsMetaDataById, requestId, request =>
+      immutable
+        .wrap(request)
+        .set('statusCode', statusCode)
+        .update('timeStamp', timeStamp => ({ ...timeStamp, end: new Date().getTime() }))
+        .value()
+    ) as unknown) as { [key: string]: CoreRequestMetaData };
+  }
+});
 
-const findQueryName = pipe(
-    removeQueryAndMutationKeyWords,
-    findFirstParenthesesIndex,
-    getQueryName
-)
+export const setRequestHeaders = assign<CoreContext, CoreEvents>({
+  resquestsMetaDataById: (context, event) => {
+    const { requestId, requestHeaders } = event.payload;
 
-const eventIsNotSetRequest = compose(
-    not,
-    equals('SET_REQUEST'),
-    prop('type'),
-    prop('event')
-)
-
-const returnSameValue = (key: 'preFlightRequestsMap' | 'requests') =>
-    ({ context, event }: { context: CoreContext, event: CoreEvents }) => context[key]
-
-const requestIsPreflight = compose(
-    not,
-    isNormalRequest,
-    prop('request'),
-    prop('event')
-)
-
-const addQueryNameToPreFlightRequestsMap = ({ context, event }: { context: CoreContext, event: SET_REQUESTS }) => {
-    const requestName = findQueryName(event.request)
-    return {
-        ...context.preFlightRequestsMap,
-        [requestName]: context.requests!.length
-    }
-}
-
-const removeQueryNameFromPreFlightRequestMap = ({ context, event }: { context: CoreContext, event: SET_REQUESTS }) => {
-    const requestName = findQueryName(event.request)
-    const preFlightRequestsCopy = Object.assign(context.preFlightRequestsMap, {})
-    delete preFlightRequestsCopy[requestName]
-
-    return preFlightRequestsCopy
-}
-
-const addRequest = ({ context, event }: { context: CoreContext, event: SET_REQUESTS }) => {
-    return [...context.requests!, event.request]
-}
-
-const updateRequest = ({ context, event }: { context: CoreContext, event: SET_REQUESTS }) => {
-    const requestName = findQueryName(event.request)
-    const requestIndex = context.preFlightRequestsMap[requestName]
-
-    return [
-        ...context.requests!.splice(0, requestIndex),
-        event.request,
-        ...context.requests!.splice(requestIndex + 1)
-    ]
-}
-
-const updatePreFlightRequestsMap = cond([
-  [eventIsNotSetRequest, returnSameValue('preFlightRequestsMap')]
-, [requestIsPreflight, addQueryNameToPreFlightRequestsMap]
-, [T, removeQueryNameFromPreFlightRequestMap]
-])
-
-const updateRequests = cond([
-  [eventIsNotSetRequest, returnSameValue('requests')]
-, [requestIsPreflight, addRequest]
-, [T, updateRequest]
-])
-
-export const parseRequest =  assign<CoreContext, CoreEvents>({
-  requests: (context, event) => updateRequests({ context, event }),
-  preFlightRequestsMap:  (context, event) => updatePreFlightRequestsMap({ context, event })
+    return (immutable.update(context.resquestsMetaDataById, requestId, request =>
+      immutable.set(request, 'headers', requestHeaders)
+    ) as unknown) as { [key: string]: CoreRequestMetaData };
+  }
 });
