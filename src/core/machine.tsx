@@ -1,38 +1,53 @@
 import { Machine } from 'xstate';
 import * as actions from './actions';
+import * as services from './services';
 
 export default Machine(
   {
     id: 'graphql-devtools',
-    initial: 'idle',
+    initial: 'core',
     context: {
       requests: [],
       resquestsMetaDataById: {}
     },
     states: {
-      idle: {
+      core: {
+        invoke: {
+          id: 'registerChromeEvents',
+          src: 'registerChromeEvents'
+        },
         on: {
           ON_REQUEST: {
-            target: '.',
+            target: '',
             actions: 'addRequest'
           },
           ON_REQUEST_COMPLETE: {
-            target: '.',
+            target: '',
             actions: 'setRequestAsComplete'
           },
           ON_BEFORE_SEND_HEADERS: {
-            target: '.',
+            target: '',
             actions: 'setRequestHeaders'
           },
-          OPEN_REQUEST_DETAILS: 'requestDetails'
+          ON_REQUEST_CANCELED: {
+            target: '',
+            actions: 'setRequestAsCanceled'
+          }
+        },
+        initial: 'listingRequests',
+        states: {
+          listingRequests: {
+            on: {
+              OPEN_REQUEST_DETAILS: 'requestDetails'
+            }
+          },
+          requestDetails: {}
         }
-      },
-      requestDetails: {
-        on: {}
       }
     }
   },
   {
-    actions
+    actions,
+    services
   }
 );

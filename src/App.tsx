@@ -1,18 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import registerChromeEvents from './core';
 
-import './core/machine';
 import { CoreContext } from './core/CoreContext';
 
 function App() {
   const { current, send } = useContext(CoreContext);
   console.log(current.context, ' <<<<<< CONTEXT');
-
-  useEffect(() => {
-    registerChromeEvents(send);
-  }, [send]);
 
   return (
     <div className="App">

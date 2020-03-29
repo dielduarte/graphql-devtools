@@ -1,7 +1,7 @@
 import { Sender } from 'xstate';
 const canceled_error = 'net::ERR_ABORTED';
 
-function registerChromeEvents(send: Sender<CoreEvents>) {
+export const registerChromeEvents = () => (send: Sender<CoreEvents>) => {
   if (process.env.NODE_ENV !== 'development') {
     //@ts-ignore
     chrome.webRequest.onBeforeRequest.addListener(
@@ -76,6 +76,4 @@ function registerChromeEvents(send: Sender<CoreEvents>) {
       ['requestHeaders']
     );
   }
-}
-
-export default registerChromeEvents;
+};
