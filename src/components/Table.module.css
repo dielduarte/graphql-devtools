@@ -1,0 +1,43 @@
+@value colors: "../styles/colors.module.css";
+@value table-hover from colors;
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.table th:first-child,
+tr td:first-child {
+  width: 335px;
+  padding-left: 35px;
+}
+
+.table th:nth-child(2),
+td:nth-child(2) {
+  width: 110px;
+  text-align: center;
+}
+
+.table th {
+  text-align: left;
+}
+
+.table td {
+  padding: 6px 0;
+}
+
+.table tr {
+  cursor: pointer;
+}
+
+.table tr:hover {
+  background: table-hover;
+}
+
+.table tbody::before {
+  content: '-';
+  display: block;
+  line-height: 1em;
+  color: transparent;
+}

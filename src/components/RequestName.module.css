@@ -1,0 +1,26 @@
+@value colors: "../styles/colors.module.css";
+@value text-gray, green, orange from colors;
+
+.name {
+  color: text-gray;
+  position: relative;
+}
+
+.name::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  position: absolute;
+  left: -15px;
+  top: 4px;
+}
+
+.mutation::before {
+  background: orange;
+}
+
+.query::before {
+  background: green;
+}

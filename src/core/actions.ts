@@ -4,13 +4,18 @@ import { getQueryDetails } from './_utils/query';
 import { requestExist } from './_utils/actions';
 
 export const addRequest = assign<CoreContext, CoreEvents>({
-  requests: (context, event) => [...context.requests, event.payload.request],
+  requests: (context, event) => [
+    (event as ON_REQUEST).payload.request,
+    ...context.requests
+  ],
   resquestsMetaDataById: (context, event) => {
-    const { queryName, operation } = getQueryDetails(event.payload.request);
+    const { queryName, operation } = getQueryDetails(
+      (event as ON_REQUEST).payload.request
+    );
 
     return immutable.set(
       context.resquestsMetaDataById,
-      event.payload.request.requestId,
+      (event as ON_REQUEST).payload.request.requestId,
       {
         queryName,
         operation,
@@ -25,7 +30,7 @@ export const addRequest = assign<CoreContext, CoreEvents>({
 
 export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
   resquestsMetaDataById: (context, event) => {
-    const { requestId, statusCode } = event.payload;
+    const { requestId, statusCode } = (event as ON_REQUEST_COMPLETE).payload;
 
     if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
 
@@ -47,7 +52,7 @@ export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
 
 export const setRequestAsCanceled = assign<CoreContext, CoreEvents>({
   resquestsMetaDataById: (context, event) => {
-    const { requestId } = event.payload;
+    const { requestId } = (event as ON_REQUEST_CANCELED).payload;
 
     if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
 
@@ -69,7 +74,10 @@ export const setRequestAsCanceled = assign<CoreContext, CoreEvents>({
 
 export const setRequestHeaders = assign<CoreContext, CoreEvents>({
   resquestsMetaDataById: (context, event) => {
-    const { requestId, requestHeaders } = event.payload;
+    const {
+      requestId,
+      requestHeaders
+    } = (event as ON_BEFORE_SEND_HEADERS).payload;
 
     if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
 
