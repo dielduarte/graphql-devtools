@@ -5,9 +5,10 @@
 }
 
 body {
-  padding-top: 35px;
   font-family: 'Roboto', sans-serif;
   background: #fff;
+  height: 100vh;
+  overflow: hidden;
 }
 
 h1 {

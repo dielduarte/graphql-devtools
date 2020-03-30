@@ -88,3 +88,7 @@ export const setRequestHeaders = assign<CoreContext, CoreEvents>({
     ) as unknown) as { [key: string]: CoreRequestMetaData };
   }
 });
+
+export const setSelectedRequest = assign<CoreContext, CoreEvents>({
+  selectedRequest: (_, event) => (event as OPEN_REQUEST_DETAILS).payload.request
+});

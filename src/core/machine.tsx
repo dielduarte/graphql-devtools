@@ -8,7 +8,8 @@ export default Machine(
     initial: 'core',
     context: {
       requests: [],
-      resquestsMetaDataById: {}
+      resquestsMetaDataById: {},
+      selectedRequest: undefined
     },
     states: {
       core: {
@@ -38,10 +39,20 @@ export default Machine(
         states: {
           listingRequests: {
             on: {
-              OPEN_REQUEST_DETAILS: 'requestDetails'
+              OPEN_REQUEST_DETAILS: {
+                actions: ['setSelectedRequest'],
+                target: 'requestDetails'
+              }
             }
           },
-          requestDetails: {}
+          requestDetails: {
+            on: {
+              OPEN_REQUEST_DETAILS: {
+                actions: ['setSelectedRequest'],
+                target: ''
+              }
+            }
+          }
         }
       }
     }

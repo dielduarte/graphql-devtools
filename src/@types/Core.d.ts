@@ -3,6 +3,7 @@ import { MachineConfig } from 'xstate';
 declare global {
   type StatusCode = number | 'loading' | 'canceled';
   type Operation = 'query' | 'mutation';
+  type CoreRequestMetaDataById = { [key: string]: CoreRequestMetaData };
 
   interface CoreRequest {
     requestId: string;
@@ -54,7 +55,7 @@ declare global {
 
   interface OPEN_REQUEST_DETAILS {
     type: 'OPEN_REQUEST_DETAILS';
-    payload: {};
+    payload: { request: CoreRequest };
   }
 
   type CoreEvents =
@@ -77,7 +78,8 @@ declare global {
 
   interface CoreContext {
     requests: Array<CoreRequest>;
-    resquestsMetaDataById: { [key: string]: CoreRequestMetaData };
+    resquestsMetaDataById: CoreRequestMetaDataById;
+    selectedRequest?: CoreRequest;
   }
 
   type CoreMachine = MachineConfig<CoreContext, CoreSchema, CoreEvents>;

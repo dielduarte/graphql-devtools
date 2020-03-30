@@ -1,14 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useCallback } from 'react';
 
-import { CoreContext } from '../core/CoreContext';
 import Status from './Status';
 import RequestName from './RequestName';
 
 import styles from './Table.module.css';
 
-function Table() {
-  const { current } = useContext<any>(CoreContext);
-  const { requests, resquestsMetaDataById } = current.context;
+interface TableProps {
+  requests: CoreRequest[];
+  resquestsMetaDataById: CoreRequestMetaDataById;
+  onRequestSelected: (request: CoreRequest) => void;
+}
+
+function Table({
+  requests,
+  resquestsMetaDataById,
+  onRequestSelected
+}: TableProps) {
+  const handleOnRequestSelected = useCallback(
+    (request: CoreRequest) => () => {
+      onRequestSelected(request);
+    },
+    [onRequestSelected]
+  );
 
   return (
     <table className={styles.table}>
@@ -20,19 +33,19 @@ function Table() {
           <th>
             <h3>Status</h3>
           </th>
-          <th>
-            <h3>Timeline</h3>
-          </th>
         </tr>
       </thead>
 
       <tbody>
-        {requests.map(({ requestId }: CoreRequest) => {
+        {requests.map((request: CoreRequest) => {
           const { queryName, statusCode, operation } = resquestsMetaDataById[
-            requestId
+            request.requestId
           ];
           return (
-            <tr key={requestId}>
+            <tr
+              key={request.requestId}
+              onClick={handleOnRequestSelected(request)}
+            >
               <td>
                 <RequestName queryName={queryName} operation={operation} />
               </td>
