@@ -1,0 +1,9 @@
+{
+  "name": "Graphql-devtools",
+  "version": "1.0",
+  "description": "Build an Extension!",
+  "manifest_version": 2,
+  "devtools_page": "devtools.html",
+  "content_security_policy": "script-src 'self' 'sha256-e6xwqkcX4TaZG2PRLQTbNzBEDY664zBiJY65FQB1oDw='; object-src 'self'",
+  "permissions": ["webRequest", "<all_urls>"]
+}

@@ -1,0 +1,33 @@
+@value colors: "../styles/colors.module.css";
+@value white from colors;
+
+.full {
+  height: 100%;
+}
+
+.root {
+  composes: full;
+  position: relative;
+}
+
+.root:hover .copy {
+  display: flex;
+}
+
+.copy {
+  position: fixed;
+  top: 55px;
+  right: 55px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+  display: none;
+  cursor: pointer;
+}
+
+.editor {
+  composes: full;
+  min-height: 75px;
+  /* margin with important due to primsjs global styles :/ */
+  margin: 0 !important;
+}
