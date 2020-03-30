@@ -8,7 +8,7 @@ declare global {
   interface CoreRequest {
     requestId: string;
     query: string;
-    variables: AnyObject;
+    variables?: AnyObject;
   }
 
   interface CoreRequestMetaData {
