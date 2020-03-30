@@ -1,3 +1,0 @@
-# Graphql-devtools
-
-WIP
