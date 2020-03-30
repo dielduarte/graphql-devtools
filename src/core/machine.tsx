@@ -33,26 +33,16 @@ export default Machine(
           ON_REQUEST_CANCELED: {
             target: '',
             actions: 'setRequestAsCanceled'
+          },
+          OPEN_REQUEST_DETAILS: {
+            actions: ['setSelectedRequest'],
+            target: 'core.requestDetails'
           }
         },
         initial: 'listingRequests',
         states: {
-          listingRequests: {
-            on: {
-              OPEN_REQUEST_DETAILS: {
-                actions: ['setSelectedRequest'],
-                target: 'requestDetails'
-              }
-            }
-          },
-          requestDetails: {
-            on: {
-              OPEN_REQUEST_DETAILS: {
-                actions: ['setSelectedRequest'],
-                target: ''
-              }
-            }
-          }
+          listingRequests: {},
+          requestDetails: {}
         }
       }
     }
