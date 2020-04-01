@@ -29,7 +29,7 @@ function CodeEditor({
         'graphql'
       ),
       variables: Prism.highlight(
-        JSON.stringify(selectedRequest.variables),
+        JSON.stringify(selectedRequest.variables || {}),
         Prism.languages.json,
         'json'
       )
