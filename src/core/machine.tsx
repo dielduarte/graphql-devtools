@@ -30,9 +30,9 @@ export default Machine(
             target: '',
             actions: 'setRequestHeaders'
           },
-          ON_REQUEST_CANCELED: {
+          ON_REQUEST_ERROR: {
             target: '',
-            actions: 'setRequestAsCanceled'
+            actions: 'setRequestStatusCode'
           },
           OPEN_REQUEST_DETAILS: {
             actions: ['setSelectedRequest'],

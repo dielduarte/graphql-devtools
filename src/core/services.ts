@@ -5,7 +5,7 @@ export const registerChromeEvents = () => (send: Sender<CoreEvents>) => {
   if (process.env.NODE_ENV !== 'development') {
     //@ts-ignore
     chrome.webRequest.onBeforeRequest.addListener(
-      function(details: any) {
+      function (details: any) {
         if (details.requestBody.raw[0]) {
           const queryDetails = JSON.parse(
             decodeURIComponent(
@@ -34,7 +34,7 @@ export const registerChromeEvents = () => (send: Sender<CoreEvents>) => {
 
     //@ts-ignore
     chrome.webRequest.onCompleted.addListener(
-      function(details: any) {
+      function (details: any) {
         send({
           type: 'ON_REQUEST_COMPLETE',
           payload: {
@@ -48,13 +48,12 @@ export const registerChromeEvents = () => (send: Sender<CoreEvents>) => {
 
     //@ts-ignore
     chrome.webRequest.onErrorOccurred.addListener(
-      function(details: any) {
-        if (details.error !== canceled_error) return;
-
+      function (details: any) {
         send({
-          type: 'ON_REQUEST_CANCELED',
+          type: 'ON_REQUEST_ERROR',
           payload: {
-            requestId: details.requestId
+            requestId: details.requestId,
+            statusCode: details.error === canceled_error ? 'canceled' : 'error'
           }
         });
       },
@@ -63,7 +62,7 @@ export const registerChromeEvents = () => (send: Sender<CoreEvents>) => {
 
     //@ts-ignore
     chrome.webRequest.onBeforeSendHeaders.addListener(
-      function(details: any) {
+      function (details: any) {
         send({
           type: 'ON_BEFORE_SEND_HEADERS',
           payload: {
