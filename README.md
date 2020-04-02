@@ -12,27 +12,25 @@ All we have to do is install the dependencies:
 $ yarn
 ```
 
-To run our development server:
+Then run our development server:
 
 ```sh
 $ yarn start
 ```
 
-To build the extension files:
-
-```sh
-$ yarn build
-```
-
-To load the extension in your Chrome browser:
+Then load the extension in your Chrome browser:
 
 1. Access `chrome://extensions`;
 2. Enable the `Developer mode` (top-right corner);
 3. Click on `Load unpacked`;
-4. Select the `graphql-devtools/dist` dir.
+4. Select the `graphql-devtools/build` dir.
 
-Whenever you make a new change in the codebase, make sure you rebuild the files and reload your extension:
+Finally, open any website running GraphQL, open your DevTools and then select the `GraphQl` tab.
 
-1. Rebuild using `yarn build`;
-2. Access `chrome://extensions`;
-3. Reload your extension by clickin on the card's "Reload" button.
+> Later we might discuss the possibility of introducing a sample webpage as well with a few buttons to perform different requests, so that we don't have to open a random website to test our extension.
+
+### Every change still needs a manual work
+
+Due the way extensions work, on every change, we still need to do some manual work.
+
+In the app running inside the `GraphQl` tab, right-click and then select `Reload frame`. It will reload the extension page with any updated code.
