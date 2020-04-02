@@ -13,7 +13,7 @@ import { copyToClipBoard } from './CodeEditor.utils';
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;
-  resquestMetaDataById: CoreRequestMetaDataById;
+  resquestMetaDataById: CoreRequestMetaData;
 }
 
 function CodeEditor({

@@ -2,7 +2,7 @@ import { Machine } from 'xstate';
 import * as actions from './actions';
 import * as services from './services';
 
-export default Machine(
+export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
     id: 'graphql-devtools',
     initial: 'core',

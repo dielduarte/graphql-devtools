@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { CoreContext } from './core/CoreContext';
+import coreMachine from './core/machine';
+import { useMachine } from '@xstate/react';
 import Table from './components/Table';
 import CodeEditor from './components/CodeEditor';
 import Grid from './layouts/Grid';
 
 function App() {
-  const { current, send } = useContext<any>(CoreContext);
+  const [current, send] = useMachine(coreMachine);
   const { requests, resquestsMetaDataById, selectedRequest } = current.context;
-  console.log(selectedRequest);
 
   return (
     <div className="App">
@@ -26,9 +26,9 @@ function App() {
           current.matches('core.requestDetails') ? (
             <CodeEditor
               resquestMetaDataById={
-                resquestsMetaDataById[selectedRequest.requestId]
+                resquestsMetaDataById[selectedRequest!.requestId]
               }
-              selectedRequest={selectedRequest}
+              selectedRequest={selectedRequest!}
             />
           ) : (
             <>Please select a request</>
