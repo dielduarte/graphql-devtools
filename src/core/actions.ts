@@ -50,9 +50,9 @@ export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
   }
 });
 
-export const setRequestAsCanceled = assign<CoreContext, CoreEvents>({
+export const setRequestStatusCode = assign<CoreContext, CoreEvents>({
   resquestsMetaDataById: (context, event) => {
-    const { requestId } = (event as ON_REQUEST_CANCELED).payload;
+    const { requestId, statusCode } = (event as ON_REQUEST_ERROR).payload;
 
     if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
 
@@ -62,7 +62,7 @@ export const setRequestAsCanceled = assign<CoreContext, CoreEvents>({
       request =>
         immutable
           .wrap(request)
-          .set('statusCode', 'canceled')
+          .set('statusCode', statusCode)
           .update('timeStamp', timeStamp => ({
             ...timeStamp,
             end: new Date().getTime()

@@ -1,7 +1,7 @@
 import { MachineConfig } from 'xstate';
 
 declare global {
-  type StatusCode = number | 'loading' | 'canceled';
+  type StatusCode = number | 'loading' | 'canceled' | 'error';
   type Operation = 'query' | 'mutation';
   type CoreRequestMetaDataById = { [key: string]: CoreRequestMetaData };
 
@@ -38,10 +38,11 @@ declare global {
     };
   }
 
-  interface ON_REQUEST_CANCELED {
-    type: 'ON_REQUEST_CANCELED';
+  interface ON_REQUEST_ERROR {
+    type: 'ON_REQUEST_ERROR';
     payload: {
       requestId: string;
+      statusCode: StatusCode;
     };
   }
 
@@ -63,7 +64,7 @@ declare global {
     | ON_REQUEST_COMPLETE
     | ON_BEFORE_SEND_HEADERS
     | OPEN_REQUEST_DETAILS
-    | ON_REQUEST_CANCELED;
+    | ON_REQUEST_ERROR;
 
   interface CoreSchema {
     states: {
