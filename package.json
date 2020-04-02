@@ -26,8 +26,8 @@
     "xstate": "^4.7.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "./scripts/watch.js",
+    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
@@ -56,6 +56,7 @@
     "@storybook/react": "^5.2.7",
     "@types/prettier": "^1.19.1",
     "@types/prismjs": "^1.16.0",
-    "babel-loader": "^8.0.6"
+    "babel-loader": "^8.0.6",
+    "webpack-extension-reloader": "^1.1.4"
   }
 }
