@@ -4,6 +4,7 @@ import coreMachine from './core/machine';
 import { useMachine } from '@xstate/react';
 import Table from './components/Table';
 import CodeEditor from './components/CodeEditor';
+import Header from 'components/Header';
 import Grid from './layouts/Grid';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
 
   return (
     <div className="App">
+      <Header />
       <Grid
         Left={
           <Table
