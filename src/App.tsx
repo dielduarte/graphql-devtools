@@ -20,6 +20,7 @@ function App() {
             }
             requests={requests}
             resquestsMetaDataById={resquestsMetaDataById}
+            selectedRequest={selectedRequest}
           />
         }
         Right={

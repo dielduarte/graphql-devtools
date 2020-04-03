@@ -1,19 +1,23 @@
 import React, { useCallback } from 'react';
+import ClassNames from 'classnames';
 
 import Status from './Status';
 import RequestName from './RequestName';
 
 import styles from './Table.module.css';
+import { compareRequests } from './Table.utils';
 
 interface TableProps {
   requests: CoreRequest[];
   resquestsMetaDataById: CoreRequestMetaDataById;
+  selectedRequest?: CoreRequest;
   onRequestSelected: (request: CoreRequest) => void;
 }
 
 function Table({
   requests,
   resquestsMetaDataById,
+  selectedRequest,
   onRequestSelected
 }: TableProps) {
   const handleOnRequestSelected = useCallback(
@@ -45,6 +49,12 @@ function Table({
             <tr
               key={request.requestId}
               onClick={handleOnRequestSelected(request)}
+              className={ClassNames({
+                [styles.isActive]: (
+                  selectedRequest &&
+                  compareRequests(request, selectedRequest)
+                )
+              })}
             >
               <td>
                 <RequestName queryName={queryName} operation={operation} />
