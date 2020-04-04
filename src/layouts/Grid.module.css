@@ -1,7 +1,6 @@
 .grid {
   display: flex;
   padding-right: 35px;
-  padding-top: 35px;
   height: 100vh;
   overflow: hidden;
 }

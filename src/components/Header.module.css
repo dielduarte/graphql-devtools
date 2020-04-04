@@ -1,0 +1,18 @@
+@value colors: "../styles/colors.module.css";
+@value green from colors;
+
+.header {
+  align-items: center;
+  display: flex;
+  padding: 32px;
+}
+
+.iconBox {
+  background: green;
+  border-radius: 10px;
+  padding: 8px;
+  margin-right: 24px;
+  height: 30px;
+  width: 30px;
+  box-shadow: 0 0 10px rgba(22, 160, 133, 0.5);
+}
