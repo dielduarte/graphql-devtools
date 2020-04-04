@@ -8,7 +8,7 @@ function Header() {
       <div className={styles.iconBox}>
         <RequestIcon />
       </div>
-      <h2>Requests</h2>
+      <h1>Requests</h1>
     </header>
   );
 }
