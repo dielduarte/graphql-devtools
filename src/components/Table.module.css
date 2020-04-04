@@ -1,5 +1,5 @@
 @value colors: "../styles/colors.module.css";
-@value table-hover, gray from colors;
+@value table-hover, gray, light-gray from colors;
 
 .table {
   width: 100%;
@@ -33,6 +33,10 @@ td:nth-child(2) {
 
 .table tr:hover {
   background: table-hover;
+}
+
+.table tr.isActive {
+  background: light-gray;
 }
 
 .table tbody::before {
