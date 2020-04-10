@@ -1,4 +1,4 @@
-import { MachineConfig } from 'xstate';
+import { MachineConfig, Interpreter, State } from 'xstate';
 
 declare global {
   type StatusCode = number | 'loading' | 'canceled' | 'error';
@@ -59,12 +59,23 @@ declare global {
     payload: { request: CoreRequest };
   }
 
+  interface OPEN_SETTINGS {
+    type: 'OPEN_SETTINGS';
+  }
+
+  interface SET_URLS {
+    type: 'SET_URLS';
+    payload: { urls: string };
+  }
+
   type CoreEvents =
     | ON_REQUEST
     | ON_REQUEST_COMPLETE
     | ON_BEFORE_SEND_HEADERS
     | OPEN_REQUEST_DETAILS
-    | ON_REQUEST_ERROR;
+    | ON_REQUEST_ERROR
+    | START_CHROME_LISTENERS
+    | SET_URLS;
 
   interface CoreSchema {
     states: {
@@ -81,6 +92,9 @@ declare global {
     requests: Array<CoreRequest>;
     resquestsMetaDataById: CoreRequestMetaDataById;
     selectedRequest?: CoreRequest;
+    settings: {
+      urls: string[];
+    };
   }
 
   type CoreMachine = MachineConfig<CoreContext, CoreSchema, CoreEvents>;
