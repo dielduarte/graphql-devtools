@@ -1,0 +1,96 @@
+@value colors: "../styles/colors.module.css";
+@value green, gray, white, red from colors;
+@value flexUtils: "../styles/flex-utils.module.css";
+@value zIndex: "../styles/zIndex.module.css";
+@value modal from zIndex;
+
+.iconBox {
+  composes: displayFlex itemsCenter contentCenter from flexUtils;
+  position: relative;
+  background: green;
+  border-radius: 10px;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  transition: box-shadow 0.2s linear;
+}
+
+.iconBox:hover,
+.iconBox:global(.active) {
+  box-shadow: 0 0 10px rgba(22, 160, 133, 0.5);
+}
+
+@keyframes alertScale {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+
+.alert {
+  animation: alertScale 1s ease-out forwards infinite alternate;
+  background: red;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: -4px;
+  left: -5px;
+}
+
+.alert::after {
+  border-radius: 50%;
+  content: '';
+  width: 15px;
+  height: 15px;
+  display: block;
+  border: 2px solid red;
+  top: -5px;
+  position: absolute;
+  left: -5px;
+  box-shadow: 0 0 10px red;
+}
+
+.settings {
+  position: relative;
+}
+
+/* input container might be changed to a modal component if needed later */
+.inputContainer {
+  position: absolute;
+  z-index: modal;
+  top: 44px;
+  left: -6px;
+  padding: 12px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background: white;
+}
+
+.inputContainer::before {
+  position: absolute;
+  top: -10px;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid white;
+}
+
+.textArea {
+  margin-top: 12px;
+  border: 1px solid gray;
+  padding: 6px 10px;
+  height: 95px;
+  width: 414px;
+  resize: none;
+  border-radius: 5px;
+}
+
+.textArea::placeholder {
+  color: gray;
+}

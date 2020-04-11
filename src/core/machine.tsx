@@ -1,6 +1,7 @@
-import { Machine } from 'xstate';
+import { Machine, send } from 'xstate';
 import * as actions from './actions';
 import * as services from './services';
+import { getUrls } from './_utils/context';
 
 export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
@@ -9,46 +10,57 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
     context: {
       requests: [],
       resquestsMetaDataById: {},
-      selectedRequest: undefined
+      selectedRequest: undefined,
+      settings: {
+        urls: getUrls(),
+      },
     },
     states: {
       core: {
         invoke: {
-          id: 'registerChromeEvents',
-          src: 'registerChromeEvents'
+          id: 'registerChromeEventsID',
+          src: 'registerChromeEvents',
         },
         on: {
           ON_REQUEST: {
             target: '',
-            actions: 'addRequest'
+            actions: 'addRequest',
           },
           ON_REQUEST_COMPLETE: {
             target: '',
-            actions: 'setRequestAsComplete'
+            actions: 'setRequestAsComplete',
           },
           ON_BEFORE_SEND_HEADERS: {
             target: '',
-            actions: 'setRequestHeaders'
+            actions: 'setRequestHeaders',
           },
           ON_REQUEST_ERROR: {
             target: '',
-            actions: 'setRequestStatusCode'
+            actions: 'setRequestStatusCode',
           },
           OPEN_REQUEST_DETAILS: {
             actions: ['setSelectedRequest'],
-            target: 'core.requestDetails'
-          }
+            target: '.requestDetails',
+          },
+          SET_URLS: {
+            actions: [
+              'parseURLs',
+              'saveURLsToLocalStorage',
+              send('UPDATE_CHROME_LISTENERS', { to: 'registerChromeEventsID' }),
+            ],
+            target: '',
+          },
         },
         initial: 'listingRequests',
         states: {
           listingRequests: {},
-          requestDetails: {}
-        }
-      }
-    }
+          requestDetails: {},
+        },
+      },
+    },
   },
   {
     actions,
-    services
+    services,
   }
 );
