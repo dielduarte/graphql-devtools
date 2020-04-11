@@ -1,11 +1,12 @@
 @value colors: "../styles/colors.module.css";
-@value green, gray white from colors;
+@value green, gray, white, red from colors;
 @value flexUtils: "../styles/flex-utils.module.css";
 @value zIndex: "../styles/zIndex.module.css";
 @value modal from zIndex;
 
 .iconBox {
   composes: displayFlex itemsCenter contentCenter from flexUtils;
+  position: relative;
   background: green;
   border-radius: 10px;
   height: 30px;
@@ -17,6 +18,39 @@
 .iconBox:hover,
 .iconBox:global(.active) {
   box-shadow: 0 0 10px rgba(22, 160, 133, 0.5);
+}
+
+@keyframes alertScale {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+
+.alert {
+  animation: alertScale 1s ease-out forwards infinite alternate;
+  background: red;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: -4px;
+  left: -5px;
+}
+
+.alert::after {
+  border-radius: 50%;
+  content: '';
+  width: 15px;
+  height: 15px;
+  display: block;
+  border: 2px solid red;
+  top: -5px;
+  position: absolute;
+  left: -5px;
+  box-shadow: 0 0 10px red;
 }
 
 .settings {

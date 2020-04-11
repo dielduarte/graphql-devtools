@@ -48,11 +48,14 @@ function Settings({ send, current }: SettingsProps) {
   return (
     <div ref={rootRef} className={styles.settings}>
       <div className={iconBoxClassName} onClick={handleOnOpen}>
+        {!active && !current.context.settings.urls.length && (
+          <div className={styles.alert} />
+        )}
         <RequestIcon />
       </div>
       {active && (
         <div className={styles.inputContainer}>
-          <h3>add URLs to start watching</h3>
+          <h3>separated by comma add URLs to start watching</h3>
           <textarea
             defaultValue={current.context.settings.urls.join(', ')}
             ref={textAreaRef}
