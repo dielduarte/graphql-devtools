@@ -17,44 +17,24 @@ function removeListenerIfNeeded(
   }
 }
 
-export function registerOnBeforeRequest({
-  urls,
-  onBeforeRequest,
-}: ChromeListenerParams) {
-  removeListenerIfNeeded('onBeforeRequest', onBeforeRequest);
+const createListener = (listenerName: string, options?: string[]) => (
+  params: ChromeListenerParams
+) => {
+  removeListenerIfNeeded(listenerName, params[listenerName]);
 
-  chrome.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls }, [
-    'requestBody',
-  ]);
-}
-
-export function registerOnCompleted({
-  urls,
-  onCompleted,
-}: ChromeListenerParams) {
-  removeListenerIfNeeded('onCompleted', onCompleted);
-
-  chrome.webRequest.onCompleted.addListener(onCompleted, { urls });
-}
-
-export function registerOnErrorOccurred({
-  urls,
-  onErrorOccurred,
-}: ChromeListenerParams) {
-  removeListenerIfNeeded('onErrorOccurred', onErrorOccurred);
-
-  chrome.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls });
-}
-
-export function registerOnBeforeSendHeaders({
-  urls,
-  onBeforeSendHeaders,
-}: ChromeListenerParams) {
-  removeListenerIfNeeded('onBeforeSendHeaders', onBeforeSendHeaders);
-
-  chrome.webRequest.onBeforeSendHeaders.addListener(
-    onBeforeSendHeaders,
-    { urls },
-    ['requestHeaders']
+  chrome.webRequest[listenerName].addListener(
+    params[listenerName],
+    { urls: params.urls },
+    options
   );
-}
+};
+
+export const registerOnBeforeRequest = createListener('onBeforeRequest', [
+  'requestBody',
+]);
+export const registerOnCompleted = createListener('onCompleted');
+export const registerOnErrorOccurred = createListener('onErrorOccurred');
+export const registerOnBeforeSendHeaders = createListener(
+  'onBeforeSendHeaders',
+  ['requestHeaders']
+);
