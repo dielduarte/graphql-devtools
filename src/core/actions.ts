@@ -104,7 +104,7 @@ export const parseURLs = assign<CoreContext, CoreEvents>({
     return {
       urls: (event as SET_URLS).payload.urls
         .split(',')
-        .map((it) => it.replace(/\s/g, '').trim()),
+        .map((it) => it.replace(/\s/g, '')), // Remove any whitespace
     };
   },
 });
