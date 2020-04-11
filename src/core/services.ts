@@ -81,7 +81,7 @@ export const registerChromeEvents = () => (
   }
 
   onReceive((e: any) => {
-    if (e.type !== 'START_CHROME_LISTENERS') return;
+    if (e.type !== 'UPDATE_CHROME_LISTENERS') return;
 
     registerAllEvents(getUrls());
   });

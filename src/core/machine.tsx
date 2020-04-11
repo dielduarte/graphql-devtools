@@ -46,7 +46,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             actions: [
               'parseURLs',
               'saveURLsToLocalStorage',
-              send('START_CHROME_LISTENERS', { to: 'registerChromeEventsID' }),
+              send('UPDATE_CHROME_LISTENERS', { to: 'registerChromeEventsID' }),
             ],
             target: '',
           },
