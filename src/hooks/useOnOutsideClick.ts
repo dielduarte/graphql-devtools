@@ -13,7 +13,10 @@ function isDescendant(parent: any, child: any) {
   return false;
 }
 
-function useOnWindowClick(containerRef: RefObject<any>, onClick: VoidFunction) {
+function useOnOutsideClick(
+  containerRef: RefObject<any>,
+  onClick: VoidFunction
+) {
   useEffect(() => {
     const handleOnWindowClick = (e: Event) => {
       !isDescendant(containerRef.current, e.target) && onClick();
@@ -25,4 +28,4 @@ function useOnWindowClick(containerRef: RefObject<any>, onClick: VoidFunction) {
   }, [onClick, containerRef]);
 }
 
-export default useOnWindowClick;
+export default useOnOutsideClick;

@@ -4,7 +4,7 @@ import ClassNames from 'classnames';
 
 import { ReactComponent as RequestIcon } from '../icons/settings.svg';
 import styles from './Settings.module.css';
-import useOnWindowClick from '../hooks/useOnWindowClick';
+import useOnOutsideClick from '../hooks/useOnOutsideClick';
 
 interface SettingsProps {
   send: Sender<CoreEvents>;
@@ -32,7 +32,7 @@ function Settings({ send, current }: SettingsProps) {
     setModalStatus(ModalStatus.open);
   }, []);
 
-  useOnWindowClick(rootRef, () => {
+  useOnOutsideClick(rootRef, () => {
     if (!active) return;
 
     send({
