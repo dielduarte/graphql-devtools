@@ -59,10 +59,6 @@ declare global {
     payload: { request: CoreRequest };
   }
 
-  interface OPEN_SETTINGS {
-    type: 'OPEN_SETTINGS';
-  }
-
   interface SET_URLS {
     type: 'SET_URLS';
     payload: { urls: string };
