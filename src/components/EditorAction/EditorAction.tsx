@@ -7,15 +7,19 @@ import { ReactComponent as CopyIcon } from 'icons/copy.svg';
 
 interface EditorActionProps {
   success?: boolean;
+  onClick?: () => void;
 };
 
-function EditorAction({ success }: EditorActionProps) {
+function EditorAction({
+  onClick = () => {},
+  success,
+}: EditorActionProps) {
   const classes = cn({
     [styles.root]: true,
     [styles.success]: success,
   });
 
-  return <div className={classes}>
+  return <div className={classes} onClick={onClick}>
     {success ? <SuccessIcon /> : <CopyIcon />}
   </div>
 }
