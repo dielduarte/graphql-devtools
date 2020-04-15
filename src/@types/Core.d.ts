@@ -78,7 +78,11 @@ declare global {
       core: {
         states: {
           listingRequests: {};
-          requestDetails: {};
+          editor: {
+            states: {
+              idle: {};
+            }
+          };
         };
       };
     };

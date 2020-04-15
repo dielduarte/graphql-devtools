@@ -7,6 +7,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
     id: 'graphql-devtools',
     initial: 'core',
+    strict: true,
     context: {
       requests: [],
       resquestsMetaDataById: {},
@@ -17,6 +18,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
     },
     states: {
       core: {
+        strict: true,
         invoke: {
           id: 'registerChromeEventsID',
           src: 'registerChromeEvents',
@@ -40,7 +42,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
           },
           OPEN_REQUEST_DETAILS: {
             actions: ['setSelectedRequest'],
-            target: '.requestDetails',
+            target: '.editor.idle',
           },
           SET_URLS: {
             actions: [
@@ -54,7 +56,13 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
         initial: 'listingRequests',
         states: {
           listingRequests: {},
-          requestDetails: {},
+          editor: {
+            initial: 'idle',
+            strict: true,
+            states: {
+              idle: {}
+            },
+          },
         },
       },
     },

@@ -30,7 +30,7 @@ function App() {
           />
         }
         Right={
-          current.matches('core.requestDetails') ? (
+          current.matches('core.editor.idle') ? (
             <CodeEditor
               resquestMetaDataById={
                 resquestsMetaDataById[selectedRequest!.requestId]
