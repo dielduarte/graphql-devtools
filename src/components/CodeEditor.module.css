@@ -10,21 +10,6 @@
   position: relative;
 }
 
-.root:hover .copy {
-  display: flex;
-}
-
-.copy {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: white;
-  display: none;
-  cursor: pointer;
-}
-
 .editor {
   composes: full;
   min-height: 75px;

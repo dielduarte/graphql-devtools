@@ -81,6 +81,7 @@ declare global {
           editor: {
             states: {
               idle: {};
+              contextCopiedSuccessfully: {};
             }
           };
         };

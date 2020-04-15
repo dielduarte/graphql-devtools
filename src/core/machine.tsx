@@ -52,6 +52,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             ],
             target: '',
           },
+          COPY_CONTEXT: '.editor.contextCopiedSuccessfully'
         },
         initial: 'listingRequests',
         states: {
@@ -60,7 +61,12 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             initial: 'idle',
             strict: true,
             states: {
-              idle: {}
+              idle: {},
+              contextCopiedSuccessfully: {
+                after: {
+                  1000: 'idle'
+                }
+              },
             },
           },
         },

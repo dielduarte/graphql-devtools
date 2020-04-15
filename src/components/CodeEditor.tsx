@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState, useCallback } from 'react';
+import React, { useEffect, memo, useState, useCallback, useMemo } from 'react';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-graphql';
 import 'prismjs/components/prism-json';
@@ -8,8 +8,10 @@ import parserGraphql from 'prettier/parser-graphql';
 import useIsMounted from 'hooks/useIsMounted';
 import '../styles/prism.css';
 import styles from './CodeEditor.module.css';
-import { ReactComponent as CopyIcon } from '../icons/copy.svg';
 import { copyToClipBoard } from './CodeEditor.utils';
+import { useMachine } from '@xstate/react';
+import machine from 'core/machine';
+import EditorAction from './EditorAction/EditorAction';
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;
@@ -20,7 +22,9 @@ function CodeEditor({
   selectedRequest,
   resquestMetaDataById
 }: CodeEditorProps) {
+  const [curr, send] = useMachine(machine);
   const isMounted = useIsMounted();
+  const [isHovering, setHovering] = useState(false);
   const getHighlightedValues = useCallback((selectedRequest: CoreRequest) => {
     return {
       query: Prism.highlight(
@@ -37,7 +41,7 @@ function CodeEditor({
   }, []);
 
   const copyQuery = useCallback(
-    (query: string) => () => {
+    (query: string) => {
       const formatedQuery = prettier.format(query, {
         parser: 'graphql',
         plugins: [parserGraphql]
@@ -60,17 +64,30 @@ function CodeEditor({
     Prism.highlightAll();
   }, [isMounted, setHighlights, selectedRequest, getHighlightedValues]);
 
+  const handleActionClick = useCallback(() => {
+    copyQuery(selectedRequest.query);
+    send('COPY_CONTEXT');
+  }, [selectedRequest, copyQuery, send]);
+
+  const chooseAction = useCallback(() => {
+    return curr.matches('core.editor.contextCopiedSuccessfully')
+      ? <EditorAction success onClick={handleActionClick} />
+      : <EditorAction onClick={handleActionClick} />
+  }, [isHovering, curr]);
+
   return (
-    <div className={styles.root}>
+    <div
+      className={styles.root}
+      onMouseEnter={() => setHovering(true) }
+      onMouseLeave={() => setHovering(false)}
+    >
       <pre className={styles.editor}>
         <code
           className={'language-graphql'}
           dangerouslySetInnerHTML={{ __html: highlights.query }}
         />
       </pre>
-      <div className={styles.copy} onClick={copyQuery(selectedRequest.query)}>
-        <CopyIcon />
-      </div>
+      {isHovering && chooseAction()}
     </div>
   );
 }
