@@ -1,0 +1,22 @@
+@value colors: "../../styles/colors.module.css";
+@value white, green from colors;
+
+.root {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.root svg {
+  width: 20px;
+  height: 20px;
+}
+
+.success {
+  background-color: green;
+  color: white;
+}
