@@ -5,6 +5,7 @@ import { useMachine } from '@xstate/react';
 import Table from './components/Table';
 import CodeEditor from './components/CodeEditor';
 import Settings from './components/Settings';
+import Filters from './components/Filters';
 import Header from 'layouts/Header';
 import Grid from './layouts/Grid';
 import Message from 'components/Message';
@@ -25,6 +26,7 @@ function App() {
       <Header
         title={'Requests'}
         Icon={<Settings send={send} current={current} />}
+        Content={<Filters />}
       />
 
       {!Boolean(requests.length) ? (
