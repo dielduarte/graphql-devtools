@@ -8,7 +8,7 @@ interface GetFilterClassNamesParams {
 
 export const getFilterClassNames = (params?: GetFilterClassNamesParams) => {
   return ClassNames({
-    [styles.tag]: true,
+    [styles.filter]: true,
     [styles.query]: params?.isQuery ?? false,
     [styles.mutation]: params?.isMutation ?? false,
   });

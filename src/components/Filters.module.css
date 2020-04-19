@@ -1,7 +1,7 @@
 @value colors: "../styles/colors.module.css";
 @value black, grey, white, orange, green, light-gray from colors;
 
-.tag {
+.filter {
   padding: 2px 22px;
   color: white;
   background: gray;
@@ -13,12 +13,12 @@
   cursor: pointer;
 }
 
-.tag:global(.active),
-.tag:hover {
+.filter:global(.active),
+.filter:hover {
   background: black;
 }
 
-.tag::after {
+.filter::after {
   content: '';
   display: inline-block;
   width: 8px;
