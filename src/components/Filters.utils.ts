@@ -4,6 +4,7 @@ import styles from './Filters.module.css';
 interface GetFilterClassNamesParams {
   isQuery?: boolean;
   isMutation?: boolean;
+  active?: boolean;
 }
 
 export const getFilterClassNames = (params?: GetFilterClassNamesParams) => {
@@ -11,5 +12,6 @@ export const getFilterClassNames = (params?: GetFilterClassNamesParams) => {
     [styles.filter]: true,
     [styles.query]: params?.isQuery ?? false,
     [styles.mutation]: params?.isMutation ?? false,
+    active: params?.active ?? false,
   });
 };

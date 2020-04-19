@@ -1,6 +1,6 @@
 import { assign } from 'xstate';
 import * as immutable from 'object-path-immutable';
-import { getQueryDetails } from './_utils/query';
+import { getOperationDetails } from './_utils/operation';
 import { requestExist } from './_utils/actions';
 import { URLS_STORAGE_KEY } from './constants';
 
@@ -10,7 +10,7 @@ export const addRequest = assign<CoreContext, CoreEvents>({
     ...context.requests,
   ],
   resquestsMetaDataById: (context, event) => {
-    const { queryName, operation } = getQueryDetails(
+    const { queryName, operation } = getOperationDetails(
       (event as ON_REQUEST).payload.request
     );
 
@@ -112,3 +112,7 @@ export const parseURLs = assign<CoreContext, CoreEvents>({
 export const saveURLsToLocalStorage = (context: CoreContext) => {
   localStorage.setItem(URLS_STORAGE_KEY, JSON.stringify(context.settings.urls));
 };
+
+export const cleanSelectedRequest = assign<CoreContext, CoreEvents>({
+  selectedRequest: undefined,
+});
