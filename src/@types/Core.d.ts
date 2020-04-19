@@ -22,12 +22,6 @@ declare global {
     headers: AnyObject;
   }
 
-  enum CoreRequestFilters {
-    ALL = 'all',
-    MUTATIOINS = 'mutations',
-    QUERIES = 'queries',
-  }
-
   // The events that the machine handles
   interface ON_REQUEST {
     type: 'ON_REQUEST';
