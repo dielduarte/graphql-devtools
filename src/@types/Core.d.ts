@@ -1,4 +1,4 @@
-import { MachineConfig, Interpreter, State } from 'xstate';
+import { MachineConfig } from 'xstate';
 
 declare global {
   type StatusCode = number | 'loading' | 'canceled' | 'error';
@@ -64,6 +64,18 @@ declare global {
     payload: { urls: string };
   }
 
+  interface FILTER_BY_QUERIES {
+    type: 'FILTER_BY_QUERIES';
+  }
+
+  interface FILTER_BY_MUTATION {
+    type: 'FILTER_BY_MUTATION';
+  }
+
+  interface SHOW_ALL {
+    type: 'SHOW_ALL';
+  }
+
   type CoreEvents =
     | ON_REQUEST
     | ON_REQUEST_COMPLETE
@@ -71,14 +83,22 @@ declare global {
     | OPEN_REQUEST_DETAILS
     | ON_REQUEST_ERROR
     | START_CHROME_LISTENERS
-    | SET_URLS;
+    | SET_URLS
+    | FILTER_BY_QUERIES
+    | FILTER_BY_MUTATION
+    | SHOW_ALL;
 
   interface CoreSchema {
     states: {
       core: {
         states: {
-          listingRequests: {};
-          requestDetails: {};
+          listingRequests: {
+            states: {
+              all: {};
+              mutations: {};
+              queries: {};
+            };
+          };
         };
       };
     };

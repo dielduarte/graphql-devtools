@@ -40,7 +40,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
           },
           OPEN_REQUEST_DETAILS: {
             actions: ['setSelectedRequest'],
-            target: '.requestDetails',
+            target: '',
           },
           SET_URLS: {
             actions: [
@@ -53,8 +53,28 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
         },
         initial: 'listingRequests',
         states: {
-          listingRequests: {},
-          requestDetails: {},
+          listingRequests: {
+            initial: 'all',
+            on: {
+              SHOW_ALL: {
+                actions: 'cleanSelectedRequest',
+                target: '.all',
+              },
+              FILTER_BY_MUTATIONS: {
+                actions: 'cleanSelectedRequest',
+                target: '.mutations',
+              },
+              FILTER_BY_QUERIES: {
+                actions: 'cleanSelectedRequest',
+                target: '.queries',
+              },
+            },
+            states: {
+              all: {},
+              mutations: {},
+              queries: {},
+            },
+          },
         },
       },
     },

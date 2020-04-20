@@ -1,0 +1,43 @@
+@value colors: "../styles/colors.module.css";
+@value black, grey, white, orange, green, light-gray from colors;
+
+.filter {
+  padding: 2px 22px;
+  color: white;
+  background: gray;
+  transition: background 0.1s linear;
+  border: none;
+  margin-right: 10px;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.active,
+.filter:hover {
+  background: black;
+}
+
+.filter::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.mutation::after,
+.query::after {
+  border: 0.5px solid white;
+}
+
+.mutation::after {
+  background: orange;
+}
+
+.query::after {
+  background: green;
+}

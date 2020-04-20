@@ -5,29 +5,28 @@ import { useMachine } from '@xstate/react';
 import Table from './components/Table';
 import CodeEditor from './components/CodeEditor';
 import Settings from './components/Settings';
+import Filters from './components/Filters';
 import Header from 'layouts/Header';
 import Grid from './layouts/Grid';
 import Message from 'components/Message';
 import { ReactComponent as RequestEmpty } from './icons/requestEmpty.svg';
 import { ReactComponent as AllEmpty } from './icons/allEmpty.svg';
+import { filterOperations } from 'core/_utils/operation';
 
 function App() {
   const [current, send] = useMachine(coreMachine);
-  const {
-    requests,
-    resquestsMetaDataById,
-    selectedRequest,
-    settings,
-  } = current.context;
+  const { resquestsMetaDataById, selectedRequest, settings } = current.context;
+  const filteredRequests = filterOperations(current);
 
   return (
     <div className="App">
       <Header
         title={'Requests'}
         Icon={<Settings send={send} current={current} />}
+        Content={<Filters send={send} current={current} />}
       />
 
-      {!Boolean(requests.length) ? (
+      {!Boolean(filteredRequests.length) ? (
         <Message
           Icon={<AllEmpty />}
           message={
@@ -43,13 +42,13 @@ function App() {
               onRequestSelected={(request) =>
                 send({ type: 'OPEN_REQUEST_DETAILS', payload: { request } })
               }
-              requests={requests}
+              requests={filteredRequests}
               resquestsMetaDataById={resquestsMetaDataById}
               selectedRequest={selectedRequest}
             />
           }
           Right={
-            current.matches('core.requestDetails') ? (
+            Boolean(current.context.selectedRequest) ? (
               <CodeEditor
                 resquestMetaDataById={
                   resquestsMetaDataById[selectedRequest!.requestId]
