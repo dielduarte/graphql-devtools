@@ -12,6 +12,6 @@ export const getFilterClassNames = (params?: GetFilterClassNamesParams) => {
     [styles.filter]: true,
     [styles.query]: params?.isQuery ?? false,
     [styles.mutation]: params?.isMutation ?? false,
-    active: params?.active ?? false,
+    [styles.active]: params?.active ?? false,
   });
 };
