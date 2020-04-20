@@ -9,3 +9,7 @@
 .contentCenter {
   justify-content: center;
 }
+
+.directionColumn {
+  flex-direction: column;
+}

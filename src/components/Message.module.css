@@ -1,0 +1,17 @@
+@value flexUtils: "../styles/flex-utils.module.css";
+@value colors: "../styles/colors.module.css";
+@value gray from colors;
+
+.root {
+  width: 100%;
+  composes: displayFlex itemsCenter directionColumn from flexUtils;
+}
+
+.root p {
+  margin-top: 28px;
+  color: gray;
+  font-size: 14px;
+  font-weight: bold;
+  max-width: 310px;
+  text-align: center;
+}
