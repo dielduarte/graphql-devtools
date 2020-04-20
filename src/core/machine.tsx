@@ -42,7 +42,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
           },
           OPEN_REQUEST_DETAILS: {
             actions: ['setSelectedRequest'],
-            target: '.editor.idle',
+            target: '',
           },
           SET_URLS: {
             actions: [
@@ -56,7 +56,28 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
         },
         initial: 'listingRequests',
         states: {
-          listingRequests: {},
+          listingRequests: {
+            initial: 'all',
+            on: {
+              SHOW_ALL: {
+                actions: 'cleanSelectedRequest',
+                target: '.all',
+              },
+              FILTER_BY_MUTATIONS: {
+                actions: 'cleanSelectedRequest',
+                target: '.mutations',
+              },
+              FILTER_BY_QUERIES: {
+                actions: 'cleanSelectedRequest',
+                target: '.queries',
+              },
+            },
+            states: {
+              all: {},
+              mutations: {},
+              queries: {},
+            },
+          },
           editor: {
             initial: 'idle',
             strict: true,
