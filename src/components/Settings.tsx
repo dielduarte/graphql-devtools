@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Sender, State } from 'xstate';
-import ClassNames from 'classnames';
+import classNames from 'classnames';
 
 import { ReactComponent as RequestIcon } from '../icons/settings.svg';
 import styles from './Settings.module.css';
@@ -23,7 +23,7 @@ function Settings({ send, current }: SettingsProps) {
   const rootRef = useRef(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const active = modalStatus === ModalStatus.open;
-  const iconBoxClassName = ClassNames({
+  const iconBoxClassName = classNames({
     [styles.iconBox]: true,
     active: active,
   });

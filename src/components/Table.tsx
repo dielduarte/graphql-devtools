@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import ClassNames from 'classnames';
+import classNames from 'classnames';
 
 import Status from './Status';
 import RequestName from './RequestName';
@@ -49,7 +49,7 @@ function Table({
             <tr
               key={request.requestId}
               onClick={handleOnRequestSelected(request)}
-              className={ClassNames({
+              className={classNames({
                 [styles.isActive]:
                   selectedRequest && compareRequests(request, selectedRequest),
               })}
