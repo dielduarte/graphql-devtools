@@ -99,12 +99,6 @@ declare global {
               queries: {};
             };
           };
-          editor: {
-            states: {
-              idle: {};
-              contextCopiedSuccessfully: {};
-            };
-          };
         };
       };
     };
@@ -112,7 +106,7 @@ declare global {
 
   interface CoreContext {
     requests: Array<CoreRequest>;
-    resquestsMetaDataById: CoreRequestMetaDataById;
+    requestsMetaDataById: CoreRequestMetaDataById;
     selectedRequest?: CoreRequest;
     settings: {
       urls: string[];

@@ -9,16 +9,16 @@ import { compareRequests } from './Table.utils';
 
 interface TableProps {
   requests: CoreRequest[];
-  resquestsMetaDataById: CoreRequestMetaDataById;
+  requestsMetaDataById: CoreRequestMetaDataById;
   selectedRequest?: CoreRequest;
   onRequestSelected: (request: CoreRequest) => void;
 }
 
 function Table({
   requests,
-  resquestsMetaDataById,
+  requestsMetaDataById,
   selectedRequest,
-  onRequestSelected
+  onRequestSelected,
 }: TableProps) {
   const handleOnRequestSelected = useCallback(
     (request: CoreRequest) => () => {
@@ -42,7 +42,7 @@ function Table({
 
       <tbody>
         {requests.map((request: CoreRequest) => {
-          const { queryName, statusCode, operation } = resquestsMetaDataById[
+          const { queryName, statusCode, operation } = requestsMetaDataById[
             request.requestId
           ];
           return (
@@ -50,10 +50,8 @@ function Table({
               key={request.requestId}
               onClick={handleOnRequestSelected(request)}
               className={ClassNames({
-                [styles.isActive]: (
-                  selectedRequest &&
-                  compareRequests(request, selectedRequest)
-                )
+                [styles.isActive]:
+                  selectedRequest && compareRequests(request, selectedRequest),
               })}
             >
               <td>

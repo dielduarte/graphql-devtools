@@ -11,7 +11,7 @@ export const getOperationDetails = (request: CoreRequest) => {
 };
 
 export const filterOperations = (current: State<CoreContext, CoreEvents>) => {
-  const { requests, resquestsMetaDataById } = current.context;
+  const { requests, requestsMetaDataById } = current.context;
 
   if (current.matches('core.listingRequests.all')) return requests;
 
@@ -20,6 +20,6 @@ export const filterOperations = (current: State<CoreContext, CoreEvents>) => {
     : 'mutation';
 
   return requests.filter(
-    (it) => resquestsMetaDataById[it.requestId].operation === operationType
+    (it) => requestsMetaDataById[it.requestId].operation === operationType
   );
 };

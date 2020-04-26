@@ -10,7 +10,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
     strict: true,
     context: {
       requests: [],
-      resquestsMetaDataById: {},
+      requestsMetaDataById: {},
       selectedRequest: undefined,
       settings: {
         urls: getUrls(),
@@ -52,7 +52,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             ],
             target: '',
           },
-          COPY_CONTEXT: '.editor.contextCopiedSuccessfully'
+          COPY_CONTEXT: '.editor.contextCopiedSuccessfully',
         },
         initial: 'listingRequests',
         states: {
@@ -76,18 +76,6 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
               all: {},
               mutations: {},
               queries: {},
-            },
-          },
-          editor: {
-            initial: 'idle',
-            strict: true,
-            states: {
-              idle: {},
-              contextCopiedSuccessfully: {
-                after: {
-                  1000: 'idle'
-                }
-              },
             },
           },
         },

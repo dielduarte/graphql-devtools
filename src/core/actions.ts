@@ -9,13 +9,13 @@ export const addRequest = assign<CoreContext, CoreEvents>({
     (event as ON_REQUEST).payload.request,
     ...context.requests,
   ],
-  resquestsMetaDataById: (context, event) => {
+  requestsMetaDataById: (context, event) => {
     const { queryName, operation } = getOperationDetails(
       (event as ON_REQUEST).payload.request
     );
 
     return immutable.set(
-      context.resquestsMetaDataById,
+      context.requestsMetaDataById,
       (event as ON_REQUEST).payload.request.requestId,
       {
         queryName,
@@ -30,13 +30,13 @@ export const addRequest = assign<CoreContext, CoreEvents>({
 });
 
 export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
-  resquestsMetaDataById: (context, event) => {
+  requestsMetaDataById: (context, event) => {
     const { requestId, statusCode } = (event as ON_REQUEST_COMPLETE).payload;
 
-    if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
+    if (!requestExist(context, requestId)) return context.requestsMetaDataById;
 
     return (immutable.update(
-      context.resquestsMetaDataById,
+      context.requestsMetaDataById,
       requestId,
       (request) =>
         immutable
@@ -52,13 +52,13 @@ export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
 });
 
 export const setRequestStatusCode = assign<CoreContext, CoreEvents>({
-  resquestsMetaDataById: (context, event) => {
+  requestsMetaDataById: (context, event) => {
     const { requestId, statusCode } = (event as ON_REQUEST_ERROR).payload;
 
-    if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
+    if (!requestExist(context, requestId)) return context.requestsMetaDataById;
 
     return (immutable.update(
-      context.resquestsMetaDataById,
+      context.requestsMetaDataById,
       requestId,
       (request) =>
         immutable
@@ -74,16 +74,16 @@ export const setRequestStatusCode = assign<CoreContext, CoreEvents>({
 });
 
 export const setRequestHeaders = assign<CoreContext, CoreEvents>({
-  resquestsMetaDataById: (context, event) => {
+  requestsMetaDataById: (context, event) => {
     const {
       requestId,
       requestHeaders,
     } = (event as ON_BEFORE_SEND_HEADERS).payload;
 
-    if (!requestExist(context, requestId)) return context.resquestsMetaDataById;
+    if (!requestExist(context, requestId)) return context.requestsMetaDataById;
 
     return (immutable.update(
-      context.resquestsMetaDataById,
+      context.requestsMetaDataById,
       requestId,
       (request) => immutable.set(request, 'headers', requestHeaders)
     ) as unknown) as { [key: string]: CoreRequestMetaData };

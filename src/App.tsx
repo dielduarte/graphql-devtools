@@ -15,7 +15,7 @@ import { filterOperations } from 'core/_utils/operation';
 
 function App() {
   const [current, send] = useMachine(coreMachine);
-  const { resquestsMetaDataById, selectedRequest, settings } = current.context;
+  const { requestsMetaDataById, selectedRequest, settings } = current.context;
   const filteredRequests = filterOperations(current);
 
   return (
@@ -43,7 +43,7 @@ function App() {
                 send({ type: 'OPEN_REQUEST_DETAILS', payload: { request } })
               }
               requests={filteredRequests}
-              resquestsMetaDataById={resquestsMetaDataById}
+              requestsMetaDataById={requestsMetaDataById}
               selectedRequest={selectedRequest}
             />
           }
@@ -51,7 +51,7 @@ function App() {
             Boolean(current.context.selectedRequest) ? (
               <CodeEditor
                 resquestMetaDataById={
-                  resquestsMetaDataById[selectedRequest!.requestId]
+                  requestsMetaDataById[selectedRequest!.requestId]
                 }
                 selectedRequest={selectedRequest!}
               />
