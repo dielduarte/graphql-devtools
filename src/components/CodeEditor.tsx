@@ -11,7 +11,7 @@ import styles from './CodeEditor.module.css';
 import { copyToClipBoard } from './CodeEditor.utils';
 import { useMachine } from '@xstate/react';
 import machine from 'core/machine';
-import EditorAction from './EditorAction/EditorAction';
+import EditorAction from './EditorAction';
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;
@@ -20,7 +20,7 @@ interface CodeEditorProps {
 
 function CodeEditor({
   selectedRequest,
-  resquestMetaDataById
+  resquestMetaDataById,
 }: CodeEditorProps) {
   const [curr, send] = useMachine(machine);
   const isMounted = useIsMounted();
@@ -36,21 +36,18 @@ function CodeEditor({
         JSON.stringify(selectedRequest.variables || {}),
         Prism.languages.json,
         'json'
-      )
+      ),
     };
   }, []);
 
-  const copyQuery = useCallback(
-    (query: string) => {
-      const formatedQuery = prettier.format(query, {
-        parser: 'graphql',
-        plugins: [parserGraphql]
-      });
+  const copyQuery = useCallback((query: string) => {
+    const formatedQuery = prettier.format(query, {
+      parser: 'graphql',
+      plugins: [parserGraphql],
+    });
 
-      copyToClipBoard(formatedQuery);
-    },
-    []
-  );
+    copyToClipBoard(formatedQuery);
+  }, []);
 
   const [highlights, setHighlights] = useState(
     getHighlightedValues(selectedRequest)
@@ -70,15 +67,17 @@ function CodeEditor({
   }, [selectedRequest, copyQuery, send]);
 
   const chooseAction = useCallback(() => {
-    return curr.matches('core.editor.contextCopiedSuccessfully')
-      ? <EditorAction success onClick={handleActionClick} />
-      : <EditorAction onClick={handleActionClick} />
+    return curr.matches('core.editor.contextCopiedSuccessfully') ? (
+      <EditorAction success onClick={handleActionClick} />
+    ) : (
+      <EditorAction onClick={handleActionClick} />
+    );
   }, [isHovering, curr]);
 
   return (
     <div
       className={styles.root}
-      onMouseEnter={() => setHovering(true) }
+      onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
       <pre className={styles.editor}>
