@@ -52,7 +52,6 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             ],
             target: '',
           },
-          COPY_CONTEXT: '.editor.contextCopiedSuccessfully',
         },
         initial: 'listingRequests',
         states: {
