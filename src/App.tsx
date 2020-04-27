@@ -17,7 +17,6 @@ function App() {
   const [current, send] = useMachine(coreMachine);
   const { requestsMetaDataById, selectedRequest, settings } = current.context;
   const filteredRequests = filterOperations(current);
-
   return (
     <div className="App">
       <Header
@@ -50,7 +49,7 @@ function App() {
           Right={
             Boolean(current.context.selectedRequest) ? (
               <CodeEditor
-                resquestMetaDataById={
+                requestMetaDataById={
                   requestsMetaDataById[selectedRequest!.requestId]
                 }
                 selectedRequest={selectedRequest!}

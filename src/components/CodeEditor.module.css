@@ -10,6 +10,14 @@
   position: relative;
 }
 
+.action {
+  display: none;
+}
+
+.root:hover .action {
+  display: block;
+}
+
 .editor {
   composes: full;
   min-height: 75px;

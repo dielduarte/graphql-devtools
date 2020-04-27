@@ -8,12 +8,18 @@ import { ReactComponent as CopyIcon } from 'icons/copy.svg';
 interface EditorActionProps {
   success?: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
-function EditorAction({ onClick = () => {}, success }: EditorActionProps) {
+function EditorAction({
+  onClick = () => {},
+  success,
+  className = '',
+}: EditorActionProps) {
   const classes = classNames({
-    [styles.root]: true,
+    [styles.action]: true,
     [styles.success]: success,
+    [className]: true,
   });
 
   return (
