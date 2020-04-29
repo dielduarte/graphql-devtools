@@ -3,29 +3,36 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-graphql';
 import 'prismjs/components/prism-json';
 
-import { formatQuery } from './CodeEditor.utils';
+import {
+  CodeEditorContext,
+  CodeEditorEvents,
+  SET_SELECTED_REQUEST,
+  SET_ACTIVE_CONTEXT,
+} from './CodeEditor.types';
+import { formatQuery, formatJson } from './CodeEditor.utils';
 
-export const setExternalContext = assign({
+export const setExternalContext = assign<CodeEditorContext, CodeEditorEvents>({
   external: (_, event) => ({
-    selectedRequest: (event as any).payload.selectedRequest,
-    requestMetaDataById: (event as any).payload.requestMetaDataById,
+    selectedRequest: (event as SET_SELECTED_REQUEST).payload.selectedRequest,
+    requestMetaDataById: (event as SET_SELECTED_REQUEST).payload
+      .requestMetaDataById,
   }),
 });
 
-export const setHighLightValues = assign({
+export const setHighLightValues = assign<CodeEditorContext, CodeEditorEvents>({
   highlights: ({ external: { selectedRequest, requestMetaDataById } }) => ({
     query: Prism.highlight(
-      formatQuery(selectedRequest.query),
+      formatQuery(selectedRequest!.query),
       Prism.languages.graphql,
       'graphql'
     ),
     variables: Prism.highlight(
-      JSON.stringify(selectedRequest.variables || {}),
+      formatJson(selectedRequest!.variables || {}),
       Prism.languages.json,
       'json'
     ),
     headers: Prism.highlight(
-      JSON.stringify(requestMetaDataById.headers || {}),
+      formatJson(requestMetaDataById!.headers || {}),
       Prism.languages.json,
       'json'
     ),
@@ -35,3 +42,8 @@ export const setHighLightValues = assign({
 export const startPrism = () => {
   Prism.highlightAll();
 };
+
+export const setActiveContext = assign<CodeEditorContext, CodeEditorEvents>({
+  activeContext: (_, event) =>
+    (event as SET_ACTIVE_CONTEXT).payload.editorContext,
+});

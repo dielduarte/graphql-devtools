@@ -1,42 +1,63 @@
 import { Machine } from 'xstate';
 import * as actions from './CodeEditor.actions';
 import * as services from './CodeEditor.services';
+import {
+  CodeEditorContext,
+  CodeEditorSchema,
+  CodeEditorEvents,
+  EditorContext,
+} from './CodeEditor.types';
 
-export default Machine(
+export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
   {
     id: 'editor',
-    initial: 'idle',
+    initial: 'editor',
     context: {
       external: {
         selectedRequest: undefined,
-        requestMetaDataById: {},
+        requestMetaDataById: undefined,
       },
       highlights: {
         query: '',
         variables: '',
         headers: '',
       },
-      activeContext: 'query', //query, variables, headers
+      activeContext: EditorContext.query,
     },
     states: {
-      idle: {
+      editor: {
+        initial: 'idle',
         on: {
-          SET_SELECTED_REQUEST: {
+          SET_ACTIVE_CONTEXT: {
             target: '.',
-            actions: ['setExternalContext', 'setHighLightValues', 'startPrism'],
+            actions: ['setActiveContext'],
           },
-          COPY_CONTEXT: 'copyingContext',
         },
-      },
-      copyingContext: {
-        invoke: {
-          src: 'copyContext',
-          onDone: 'contextCopiedSuccessfully',
-        },
-      },
-      contextCopiedSuccessfully: {
-        after: {
-          1000: 'idle',
+        states: {
+          idle: {
+            on: {
+              SET_SELECTED_REQUEST: {
+                target: '.',
+                actions: [
+                  'setExternalContext',
+                  'setHighLightValues',
+                  'startPrism',
+                ],
+              },
+              COPY_CONTEXT: 'copyingContext',
+            },
+          },
+          copyingContext: {
+            invoke: {
+              src: 'copyContext',
+              onDone: 'contextCopiedSuccessfully',
+            },
+          },
+          contextCopiedSuccessfully: {
+            after: {
+              1000: 'idle',
+            },
+          },
         },
       },
     },

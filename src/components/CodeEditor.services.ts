@@ -1,12 +1,24 @@
-import { copyToClipBoard, formatQuery } from './CodeEditor.utils';
+import { copyToClipBoard, formatQuery, formatJson } from './CodeEditor.utils';
+import { EditorContext, CodeEditorContext } from './CodeEditor.types';
 
-export const copyContext = (context: any) => {
+export const copyContext = (context: CodeEditorContext) => {
   return new Promise((resolve, reject) => {
     const {
-      external: { selectedRequest },
+      external: { selectedRequest, requestMetaDataById },
+      activeContext,
     } = context;
+
     try {
-      copyToClipBoard(formatQuery(selectedRequest.query));
+      if (activeContext !== EditorContext.Headers) {
+        copyToClipBoard(
+          activeContext === EditorContext.query
+            ? formatQuery(selectedRequest!.query)
+            : formatJson(selectedRequest!.variables || {})
+        );
+      } else {
+        copyToClipBoard(formatJson(requestMetaDataById!.headers));
+      }
+
       resolve();
     } catch {
       reject();

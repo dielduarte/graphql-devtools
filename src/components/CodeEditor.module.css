@@ -1,3 +1,4 @@
+@value flexUtils: "../styles/flex-utils.module.css";
 @value colors: "../styles/colors.module.css";
 @value white from colors;
 
@@ -5,22 +6,34 @@
   height: 100%;
 }
 
-.root {
-  composes: full;
+.editor {
   position: relative;
+  flex: 1 1;
 }
 
 .action {
   display: none;
 }
 
-.root:hover .action {
+.editor:hover .action {
   display: block;
 }
 
-.editor {
+.code {
   composes: full;
   min-height: 75px;
   /* margin with important due to primsjs global styles :/ */
   margin: 0 !important;
+}
+
+.root {
+  composes: full;
+  composes: displayFlex from flexUtils;
+  position: relative;
+}
+
+.tabs {
+  position: fixed;
+  right: 21px;
+  top: 196px;
 }

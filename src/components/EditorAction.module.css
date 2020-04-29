@@ -2,9 +2,9 @@
 @value white, green from colors;
 
 .action {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  position: fixed;
+  top: 106px;
+  right: 46px;
   padding: 10px;
   border-radius: 10px;
   background-color: white;
