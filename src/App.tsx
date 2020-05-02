@@ -2,13 +2,14 @@ import React from 'react';
 
 import coreMachine from './core/machine';
 import { useMachine } from '@xstate/react';
-import Table from './components/Table';
-import CodeEditor from './components/CodeEditor';
-import Settings from './components/Settings';
-import Filters from './components/Filters';
+import Table from './core/components/Table';
+import Settings from './core/components/Settings';
+import Filters from './core/components/Filters';
+import CodeEditor from './domains/editor/components/CodeEditor';
+
 import Header from 'layouts/Header';
 import Grid from './layouts/Grid';
-import Message from 'components/Message';
+import Message from 'core/components/Message';
 import { ReactComponent as RequestEmpty } from './icons/requestEmpty.svg';
 import { ReactComponent as AllEmpty } from './icons/allEmpty.svg';
 import { filterOperations } from 'core/_utils/operation';

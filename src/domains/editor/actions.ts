@@ -8,8 +8,8 @@ import {
   CodeEditorEvents,
   SET_SELECTED_REQUEST,
   SET_ACTIVE_CONTEXT,
-} from './CodeEditor.types';
-import { formatQuery, formatJson } from './CodeEditor.utils';
+} from './_types';
+import { formatQuery, formatJson } from './_utils';
 
 export const setExternalContext = assign<CodeEditorContext, CodeEditorEvents>({
   external: (_, event) => ({

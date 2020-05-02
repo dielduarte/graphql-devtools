@@ -1,7 +1,7 @@
 import { print, parse } from 'graphql';
 
-import { copyToClipBoard, formatQuery, formatJson } from './CodeEditor.utils';
-import { EditorContext, CodeEditorContext } from './CodeEditor.types';
+import { copyToClipBoard, formatQuery, formatJson } from './_utils';
+import { EditorContext, CodeEditorContext } from './_types';
 
 export const copyContext = (context: CodeEditorContext) => {
   return new Promise((resolve, reject) => {

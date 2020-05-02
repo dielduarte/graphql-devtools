@@ -1,5 +1,5 @@
-@value flexUtils: "../styles/flex-utils.module.css";
-@value colors: "../styles/colors.module.css";
+@value flexUtils: "../../../styles/flex-utils.module.css";
+@value colors: "../../../styles/colors.module.css";
 @value white from colors;
 
 .full {

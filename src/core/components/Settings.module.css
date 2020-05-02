@@ -1,7 +1,7 @@
-@value colors: "../styles/colors.module.css";
+@value colors: "../../styles/colors.module.css";
 @value green, gray, white, red from colors;
-@value flexUtils: "../styles/flex-utils.module.css";
-@value zIndex: "../styles/zIndex.module.css";
+@value flexUtils: "../../styles/flex-utils.module.css";
+@value zIndex: "../../styles/zIndex.module.css";
 @value modal from zIndex;
 
 .iconBox {
