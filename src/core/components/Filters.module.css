@@ -13,7 +13,7 @@
   cursor: pointer;
 }
 
-.filter:global(.active),
+.active,
 .filter:hover {
   background: black;
 }
