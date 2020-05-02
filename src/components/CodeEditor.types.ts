@@ -25,10 +25,15 @@ export interface SET_ACTIVE_CONTEXT {
   };
 }
 
+export interface REFETCH_OPERATION {
+  type: 'REFETCH_OPERATION';
+}
+
 export type CodeEditorEvents =
   | SET_SELECTED_REQUEST
   | COPY_CONTEXT
-  | SET_ACTIVE_CONTEXT;
+  | SET_ACTIVE_CONTEXT
+  | REFETCH_OPERATION;
 
 export interface CodeEditorSchema {
   states: {
@@ -37,6 +42,8 @@ export interface CodeEditorSchema {
         idle: {};
         copyingContext: {};
         contextCopiedSuccessfully: {};
+        refetchingOperation: {};
+        operationRefetchedSuccessfully: {};
       };
     };
   };

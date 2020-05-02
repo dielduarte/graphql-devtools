@@ -16,7 +16,7 @@
 }
 
 .editor:hover .action {
-  display: block;
+  display: flex;
 }
 
 .code {

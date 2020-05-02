@@ -1,12 +1,15 @@
-import React, { memo, useEffect, useCallback, useMemo } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 
 import '../styles/prism.css';
 import styles from './CodeEditor.module.css';
 import { useMachine } from '@xstate/react';
 import machine from './CodeEditor.machine';
-import EditorAction from './EditorAction';
+import EditorActions from './EditorActions';
 import ContextTabs from './ContextTabs';
 import { EditorContext } from './CodeEditor.types';
+import { ReactComponent as CopyIcon } from 'icons/copy.svg';
+import { ReactComponent as RefetchIcon } from 'icons/refetch.svg';
+import { TAB_COLORS } from './CodeEditor.constants';
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;
@@ -27,20 +30,6 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
     [send]
   );
 
-  const operationTabMetaData = useMemo(() => {
-    if (requestMetaDataById.operation === 'query') {
-      return {
-        title: 'Query',
-        background: '#16A085',
-      };
-    }
-
-    return {
-      title: 'Mutation',
-      background: '#E67E22',
-    };
-  }, [requestMetaDataById.operation]);
-
   useEffect(() => {
     send({
       type: 'SET_SELECTED_REQUEST',
@@ -57,32 +46,51 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
             dangerouslySetInnerHTML={{ __html: highlights[activeContext] }}
           />
         </pre>
-        <EditorAction
-          success={current.matches('editor.contextCopiedSuccessfully')}
-          className={styles.action}
-          onClick={() => {
-            send('COPY_CONTEXT');
-          }}
-        />
+        <EditorActions className={styles.action}>
+          <EditorActions.Action
+            Icon={<RefetchIcon />}
+            onClick={() => send('REFETCH_OPERATION')}
+            success={current.matches('editor.operationRefetchedSuccessfully')}
+            loading={current.matches('editor.refetchingOperation')}
+          />
+          <EditorActions.Action
+            Icon={<CopyIcon />}
+            onClick={() => send('COPY_CONTEXT')}
+            success={current.matches('editor.contextCopiedSuccessfully')}
+          />
+        </EditorActions>
       </div>
 
       <ContextTabs className={styles.tabs}>
         <ContextTabs.Tab
-          title={operationTabMetaData.title}
-          background={operationTabMetaData.background}
-          hide={activeContext === EditorContext.query}
+          title={'Query'}
+          background={TAB_COLORS.query}
+          hide={
+            activeContext === EditorContext.query ||
+            requestMetaDataById.operation !== 'query'
+          }
+          onClick={handleSetActiveContext(EditorContext.query)}
+        />
+
+        <ContextTabs.Tab
+          title={'Mutation'}
+          background={TAB_COLORS.mutation}
+          hide={
+            activeContext === EditorContext.query ||
+            requestMetaDataById.operation !== 'mutation'
+          }
           onClick={handleSetActiveContext(EditorContext.query)}
         />
 
         <ContextTabs.Tab
           title="Variables"
-          background="#81AADD"
+          background={TAB_COLORS.variables}
           hide={activeContext === EditorContext.variables}
           onClick={handleSetActiveContext(EditorContext.variables)}
         />
         <ContextTabs.Tab
           title="Headers"
-          background="#999BA4"
+          background={TAB_COLORS.headers}
           hide={activeContext === EditorContext.Headers}
           onClick={handleSetActiveContext(EditorContext.Headers)}
         />

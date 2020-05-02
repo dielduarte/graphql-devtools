@@ -23,6 +23,7 @@ export const registerChromeEvents = () => (
         payload: {
           request: {
             requestId: details.requestId,
+            url: details.url,
             query: queryDetails.query,
             variables: queryDetails.variables,
           },

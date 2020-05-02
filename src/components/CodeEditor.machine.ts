@@ -45,6 +45,7 @@ export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
                 ],
               },
               COPY_CONTEXT: 'copyingContext',
+              REFETCH_OPERATION: 'refetchingOperation',
             },
           },
           copyingContext: {
@@ -54,6 +55,17 @@ export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
             },
           },
           contextCopiedSuccessfully: {
+            after: {
+              1000: 'idle',
+            },
+          },
+          refetchingOperation: {
+            invoke: {
+              src: 'refetchOperation',
+              onDone: 'operationRefetchedSuccessfully',
+            },
+          },
+          operationRefetchedSuccessfully: {
             after: {
               1000: 'idle',
             },

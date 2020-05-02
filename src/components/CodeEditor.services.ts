@@ -1,3 +1,5 @@
+import { print, parse } from 'graphql';
+
 import { copyToClipBoard, formatQuery, formatJson } from './CodeEditor.utils';
 import { EditorContext, CodeEditorContext } from './CodeEditor.types';
 
@@ -23,5 +25,20 @@ export const copyContext = (context: CodeEditorContext) => {
     } catch {
       reject();
     }
+  });
+};
+
+export const refetchOperation = (context: CodeEditorContext) => {
+  const {
+    external: { selectedRequest, requestMetaDataById },
+  } = context;
+
+  return fetch(selectedRequest!.url, {
+    method: 'POST',
+    headers: requestMetaDataById?.headers,
+    body: JSON.stringify({
+      query: print(parse(selectedRequest?.query as string)),
+      variables: selectedRequest!.variables || {},
+    }),
   });
 };
