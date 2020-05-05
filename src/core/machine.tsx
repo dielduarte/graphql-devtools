@@ -7,9 +7,10 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
     id: 'graphql-devtools',
     initial: 'core',
+    strict: true,
     context: {
       requests: [],
-      resquestsMetaDataById: {},
+      requestsMetaDataById: {},
       selectedRequest: undefined,
       settings: {
         urls: getUrls(),
@@ -17,6 +18,7 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
     },
     states: {
       core: {
+        strict: true,
         invoke: {
           id: 'registerChromeEventsID',
           src: 'registerChromeEvents',

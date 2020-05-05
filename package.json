@@ -54,7 +54,7 @@
     "@storybook/addon-links": "^5.2.7",
     "@storybook/addons": "^5.2.7",
     "@storybook/react": "^5.2.7",
-    "@types/prettier": "^1.19.1",
+    "@types/prettier": "^2.0.0",
     "@types/prismjs": "^1.16.0",
     "babel-loader": "^8.0.6",
     "webpack-extension-reloader": "^1.1.4"

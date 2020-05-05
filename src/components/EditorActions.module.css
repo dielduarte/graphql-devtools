@@ -1,0 +1,44 @@
+@value colors: "../styles/colors.module.css";
+@value white, green, medium-blue from colors;
+
+@keyframes spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.root {
+  position: fixed;
+  top: 106px;
+  right: 46px;
+}
+
+.root .action:first-child {
+  margin-right: 10px;
+}
+
+.action {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.action svg {
+  width: 20px;
+  height: 20px;
+}
+
+.success {
+  background-color: green;
+  color: white;
+}
+
+.loading {
+  background-color: medium-blue;
+  color: white;
+}
+
+.loading svg {
+  animation: spin 2s linear infinite;
+}

@@ -1,6 +1,7 @@
 import { Sender } from 'xstate';
 import { getUrls } from './_utils/context';
 import * as chromeListeners from './_utils/chromeListeners';
+import { parseHeaders } from './_utils/services';
 
 export const registerChromeEvents = () => (
   send: Sender<CoreEvents>,
@@ -22,6 +23,7 @@ export const registerChromeEvents = () => (
         payload: {
           request: {
             requestId: details.requestId,
+            url: details.url,
             query: queryDetails.query,
             variables: queryDetails.variables,
           },
@@ -57,7 +59,7 @@ export const registerChromeEvents = () => (
       type: 'ON_BEFORE_SEND_HEADERS',
       payload: {
         requestId: details.requestId,
-        requestHeaders: details.requestHeaders,
+        requestHeaders: parseHeaders(details.requestHeaders),
       },
     });
   }

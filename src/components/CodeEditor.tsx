@@ -1,76 +1,100 @@
-import React, { useEffect, memo, useState, useCallback } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-graphql';
-import 'prismjs/components/prism-json';
-import prettier from 'prettier/standalone';
-import parserGraphql from 'prettier/parser-graphql';
+import React, { memo, useEffect, useCallback } from 'react';
 
-import useIsMounted from 'hooks/useIsMounted';
 import '../styles/prism.css';
 import styles from './CodeEditor.module.css';
-import { ReactComponent as CopyIcon } from '../icons/copy.svg';
-import { copyToClipBoard } from './CodeEditor.utils';
+import { useMachine } from '@xstate/react';
+import machine from './CodeEditor.machine';
+import EditorActions from './EditorActions';
+import ContextTabs from './ContextTabs';
+import { EditorContext } from './CodeEditor.types';
+import { ReactComponent as CopyIcon } from 'icons/copy.svg';
+import { ReactComponent as RefetchIcon } from 'icons/refetch.svg';
+import { TAB_COLORS } from './CodeEditor.constants';
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;
-  resquestMetaDataById: CoreRequestMetaData;
+  requestMetaDataById: CoreRequestMetaData;
 }
 
-function CodeEditor({
-  selectedRequest,
-  resquestMetaDataById
-}: CodeEditorProps) {
-  const isMounted = useIsMounted();
-  const getHighlightedValues = useCallback((selectedRequest: CoreRequest) => {
-    return {
-      query: Prism.highlight(
-        selectedRequest.query,
-        Prism.languages.graphql,
-        'graphql'
-      ),
-      variables: Prism.highlight(
-        JSON.stringify(selectedRequest.variables || {}),
-        Prism.languages.json,
-        'json'
-      )
-    };
-  }, []);
+function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
+  const [current, send] = useMachine(machine);
+  const { highlights, activeContext } = current.context;
 
-  const copyQuery = useCallback(
-    (query: string) => () => {
-      const formatedQuery = prettier.format(query, {
-        parser: 'graphql',
-        plugins: [parserGraphql]
+  const handleSetActiveContext = useCallback(
+    (editorContext: EditorContext) => () => {
+      send({
+        type: 'SET_ACTIVE_CONTEXT',
+        payload: { editorContext },
       });
-
-      copyToClipBoard(formatedQuery);
     },
-    []
-  );
-
-  const [highlights, setHighlights] = useState(
-    getHighlightedValues(selectedRequest)
+    [send]
   );
 
   useEffect(() => {
-    if (isMounted) {
-      setHighlights(getHighlightedValues(selectedRequest));
-    }
-
-    Prism.highlightAll();
-  }, [isMounted, setHighlights, selectedRequest, getHighlightedValues]);
+    send({
+      type: 'SET_SELECTED_REQUEST',
+      payload: { selectedRequest, requestMetaDataById },
+    });
+  }, [selectedRequest, requestMetaDataById, send]);
 
   return (
     <div className={styles.root}>
-      <pre className={styles.editor}>
-        <code
-          className={'language-graphql'}
-          dangerouslySetInnerHTML={{ __html: highlights.query }}
-        />
-      </pre>
-      <div className={styles.copy} onClick={copyQuery(selectedRequest.query)}>
-        <CopyIcon />
+      <div className={styles.editor}>
+        <pre className={styles.code}>
+          <code
+            className={'language-graphql'}
+            dangerouslySetInnerHTML={{ __html: highlights[activeContext] }}
+          />
+        </pre>
+        <EditorActions className={styles.action}>
+          <EditorActions.Action
+            Icon={<RefetchIcon />}
+            onClick={() => send('REFETCH_OPERATION')}
+            success={current.matches('operationRefetchedSuccessfully')}
+            loading={current.matches('refetchingOperation')}
+          />
+          <EditorActions.Action
+            Icon={<CopyIcon />}
+            onClick={() => send('COPY_CONTEXT')}
+            success={current.matches('contextCopiedSuccessfully')}
+          />
+        </EditorActions>
       </div>
+
+      <ContextTabs className={styles.tabs}>
+        <ContextTabs.Tab
+          title={'Query'}
+          background={TAB_COLORS.query}
+          hide={
+            activeContext === EditorContext.query ||
+            requestMetaDataById.operation !== 'query'
+          }
+          onClick={handleSetActiveContext(EditorContext.query)}
+        />
+
+        <ContextTabs.Tab
+          title={'Mutation'}
+          background={TAB_COLORS.mutation}
+          hide={
+            activeContext === EditorContext.query ||
+            requestMetaDataById.operation !== 'mutation'
+          }
+          onClick={handleSetActiveContext(EditorContext.query)}
+        />
+
+        <ContextTabs.Tab
+          title="Variables"
+          background={TAB_COLORS.variables}
+          hide={activeContext === EditorContext.variables}
+          onClick={handleSetActiveContext(EditorContext.variables)}
+        />
+        <ContextTabs.Tab
+          title="Headers"
+          background={TAB_COLORS.headers}
+          hide={activeContext === EditorContext.Headers}
+          onClick={handleSetActiveContext(EditorContext.Headers)}
+        />
+      </ContextTabs>
     </div>
   );
 }

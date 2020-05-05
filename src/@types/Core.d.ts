@@ -8,6 +8,7 @@ declare global {
   interface CoreRequest {
     requestId: string;
     query: string;
+    url: string;
     variables?: AnyObject;
   }
 
@@ -106,7 +107,7 @@ declare global {
 
   interface CoreContext {
     requests: Array<CoreRequest>;
-    resquestsMetaDataById: CoreRequestMetaDataById;
+    requestsMetaDataById: CoreRequestMetaDataById;
     selectedRequest?: CoreRequest;
     settings: {
       urls: string[];
