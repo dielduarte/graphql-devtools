@@ -2,9 +2,9 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Sender, State } from 'xstate';
 import classNames from 'classnames';
 
-import { ReactComponent as RequestIcon } from '../icons/settings.svg';
+import { ReactComponent as RequestIcon } from '../../icons/settings.svg';
 import styles from './Settings.module.css';
-import useOnOutsideClick from '../hooks/useOnOutsideClick';
+import useOnOutsideClick from '../../hooks/useOnOutsideClick';
 
 interface SettingsProps {
   send: Sender<CoreEvents>;
