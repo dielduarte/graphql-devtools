@@ -11,7 +11,7 @@ import {
 export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
   {
     id: 'editor',
-    initial: 'editor',
+    initial: 'idle',
     context: {
       external: {
         selectedRequest: undefined,
@@ -25,51 +25,40 @@ export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
       activeContext: EditorContext.query,
     },
     states: {
-      editor: {
-        initial: 'idle',
+      idle: {
         on: {
           SET_ACTIVE_CONTEXT: {
             target: '.',
             actions: ['setActiveContext'],
           },
+          SET_SELECTED_REQUEST: {
+            target: '.',
+            actions: ['setExternalContext', 'setHighLightValues', 'startPrism'],
+          },
+          COPY_CONTEXT: 'copyingContext',
+          REFETCH_OPERATION: 'refetchingOperation',
         },
-        states: {
-          idle: {
-            on: {
-              SET_SELECTED_REQUEST: {
-                target: '.',
-                actions: [
-                  'setExternalContext',
-                  'setHighLightValues',
-                  'startPrism',
-                ],
-              },
-              COPY_CONTEXT: 'copyingContext',
-              REFETCH_OPERATION: 'refetchingOperation',
-            },
-          },
-          copyingContext: {
-            invoke: {
-              src: 'copyContext',
-              onDone: 'contextCopiedSuccessfully',
-            },
-          },
-          contextCopiedSuccessfully: {
-            after: {
-              1000: 'idle',
-            },
-          },
-          refetchingOperation: {
-            invoke: {
-              src: 'refetchOperation',
-              onDone: 'operationRefetchedSuccessfully',
-            },
-          },
-          operationRefetchedSuccessfully: {
-            after: {
-              1000: 'idle',
-            },
-          },
+      },
+      copyingContext: {
+        invoke: {
+          src: 'copyContext',
+          onDone: 'contextCopiedSuccessfully',
+        },
+      },
+      contextCopiedSuccessfully: {
+        after: {
+          1000: 'idle',
+        },
+      },
+      refetchingOperation: {
+        invoke: {
+          src: 'refetchOperation',
+          onDone: 'operationRefetchedSuccessfully',
+        },
+      },
+      operationRefetchedSuccessfully: {
+        after: {
+          1000: 'idle',
         },
       },
     },

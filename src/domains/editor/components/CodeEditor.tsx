@@ -50,13 +50,13 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
           <EditorActions.Action
             Icon={<RefetchIcon />}
             onClick={() => send('REFETCH_OPERATION')}
-            success={current.matches('editor.operationRefetchedSuccessfully')}
-            loading={current.matches('editor.refetchingOperation')}
+            success={current.matches('operationRefetchedSuccessfully')}
+            loading={current.matches('refetchingOperation')}
           />
           <EditorActions.Action
             Icon={<CopyIcon />}
             onClick={() => send('COPY_CONTEXT')}
-            success={current.matches('editor.contextCopiedSuccessfully')}
+            success={current.matches('contextCopiedSuccessfully')}
           />
         </EditorActions>
       </div>
