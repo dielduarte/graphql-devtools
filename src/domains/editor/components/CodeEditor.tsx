@@ -1,15 +1,15 @@
 import React, { memo, useEffect, useCallback } from 'react';
 
-import '../styles/prism.css';
+import '../../../styles/prism.css';
 import styles from './CodeEditor.module.css';
 import { useMachine } from '@xstate/react';
-import machine from './CodeEditor.machine';
+import machine from '../machine';
 import EditorActions from './EditorActions';
 import ContextTabs from './ContextTabs';
-import { EditorContext } from './CodeEditor.types';
+import { EditorContext } from '../_types';
 import { ReactComponent as CopyIcon } from 'icons/copy.svg';
 import { ReactComponent as RefetchIcon } from 'icons/refetch.svg';
-import { TAB_COLORS } from './CodeEditor.constants';
+import { TAB_COLORS } from '../constants';
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;

@@ -1,12 +1,12 @@
 import { Machine } from 'xstate';
-import * as actions from './CodeEditor.actions';
-import * as services from './CodeEditor.services';
+import * as actions from './actions';
+import * as services from './services';
 import {
   CodeEditorContext,
   CodeEditorSchema,
   CodeEditorEvents,
   EditorContext,
-} from './CodeEditor.types';
+} from './_types';
 
 export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
   {

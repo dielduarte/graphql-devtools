@@ -1,4 +1,4 @@
-@value colors: "../styles/colors.module.css";
+@value colors: "../../styles/colors.module.css";
 @value light-blue, light-green, light-orange, medium-blue, medium-green, medium-orange from colors;
 
 .tag {
