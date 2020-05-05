@@ -37,15 +37,11 @@ export type CodeEditorEvents =
 
 export interface CodeEditorSchema {
   states: {
-    editor: {
-      states: {
-        idle: {};
-        copyingContext: {};
-        contextCopiedSuccessfully: {};
-        refetchingOperation: {};
-        operationRefetchedSuccessfully: {};
-      };
-    };
+    idle: {};
+    copyingContext: {};
+    contextCopiedSuccessfully: {};
+    refetchingOperation: {};
+    operationRefetchedSuccessfully: {};
   };
 }
 
