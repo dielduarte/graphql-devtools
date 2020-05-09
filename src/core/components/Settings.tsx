@@ -28,9 +28,9 @@ function Settings({ send, current }: SettingsProps) {
     active: active,
   });
 
-  const handleOnOpen = useCallback(() => {
-    setModalStatus(ModalStatus.open);
-  }, []);
+  const handleOnClick = useCallback(() => {
+    setModalStatus(active ? ModalStatus.close : ModalStatus.open);
+  }, [active]);
 
   useOnOutsideClick(rootRef, () => {
     if (!active) return;
@@ -47,7 +47,7 @@ function Settings({ send, current }: SettingsProps) {
 
   return (
     <div ref={rootRef} className={styles.settings}>
-      <div className={iconBoxClassName} onClick={handleOnOpen}>
+      <div className={iconBoxClassName} onClick={handleOnClick}>
         {!active && !current.context.settings.urls.length && (
           <div className={styles.alert} />
         )}
