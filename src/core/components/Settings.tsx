@@ -7,65 +7,66 @@ import styles from './Settings.module.css';
 import useOnOutsideClick from '../../hooks/useOnOutsideClick';
 
 interface SettingsProps {
-  send: Sender<CoreEvents>;
-  current: State<CoreContext, CoreEvents>;
+	send: Sender<CoreEvents>;
+	current: State<CoreContext, CoreEvents>;
 }
 
 enum ModalStatus {
-  open,
-  close,
+	open,
+	close,
 }
 
 function Settings({ send, current }: SettingsProps) {
-  const [modalStatus, setModalStatus] = useState<ModalStatus>(
-    ModalStatus.close
-  );
-  const rootRef = useRef(null);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const active = modalStatus === ModalStatus.open;
-  const iconBoxClassName = classNames({
-    [styles.iconBox]: true,
-    active: active,
-  });
+	const [modalStatus, setModalStatus] = useState<ModalStatus>(ModalStatus.close);
+	const rootRef = useRef(null);
+	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	const active = modalStatus === ModalStatus.open;
+	const iconBoxClassName = classNames({
+		[styles.iconBox]: true,
+		active: active,
+	});
 
-  const handleOnClick = useCallback(() => {
-    setModalStatus(active ? ModalStatus.close : ModalStatus.open);
-  }, [active]);
+	const setUrls = useCallback(() => {
+		send({
+			type: 'SET_URLS',
+			payload: {
+				urls: textAreaRef.current ? textAreaRef.current.value : '',
+			},
+		});
+	}, [send]);
 
-  useOnOutsideClick(rootRef, () => {
-    if (!active) return;
+	const toggleSettingMenu = useCallback(() => {
+		setModalStatus(active ? ModalStatus.close : ModalStatus.open);
+		setUrls();
+	}, [active, setUrls]);
 
-    send({
-      type: 'SET_URLS',
-      payload: {
-        urls: textAreaRef.current ? textAreaRef.current.value : '',
-      },
-    });
+	useOnOutsideClick(rootRef, () => {
+		if (!active) return;
 
-    setModalStatus(ModalStatus.close);
-  });
+		setUrls();
 
-  return (
-    <div ref={rootRef} className={styles.settings}>
-      <div className={iconBoxClassName} onClick={handleOnClick}>
-        {!active && !current.context.settings.urls.length && (
-          <div className={styles.alert} />
-        )}
-        <RequestIcon />
-      </div>
-      {active && (
-        <div className={styles.inputContainer}>
-          <h3>separated by comma add URLs to start watching</h3>
-          <textarea
-            defaultValue={current.context.settings.urls.join(', ')}
-            ref={textAreaRef}
-            className={styles.textArea}
-            placeholder="https://myapi.rocks/graphql, https://otherapi.com/graphql"
-          />
-        </div>
-      )}
-    </div>
-  );
+		setModalStatus(ModalStatus.close);
+	});
+
+	return (
+		<div ref={rootRef} className={styles.settings}>
+			<div className={iconBoxClassName} onClick={toggleSettingMenu}>
+				{!active && !current.context.settings.urls.length && <div className={styles.alert} />}
+				<RequestIcon />
+			</div>
+			{active && (
+				<div className={styles.inputContainer}>
+					<h3>separated by comma add URLs to start watching</h3>
+					<textarea
+						defaultValue={current.context.settings.urls.join(', ')}
+						ref={textAreaRef}
+						className={styles.textArea}
+						placeholder='https://myapi.rocks/graphql, https://otherapi.com/graphql'
+					/>
+				</div>
+			)}
+		</div>
+	);
 }
 
 export default Settings;
