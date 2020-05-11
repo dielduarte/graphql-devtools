@@ -26,19 +26,19 @@ function Settings({ send, current }: SettingsProps) {
 		active: active,
 	});
 
-	const setUrls = useCallback(() => {
+	const setUrls = () => {
 		send({
 			type: 'SET_URLS',
 			payload: {
 				urls: textAreaRef.current ? textAreaRef.current.value : '',
 			},
 		});
-	}, [send]);
+	};
 
-	const toggleSettingMenu = useCallback(() => {
+	const toggleSettingMenu = () => {
 		setModalStatus(active ? ModalStatus.close : ModalStatus.open);
 		setUrls();
-	}, [active, setUrls]);
+	};
 
 	useOnOutsideClick(rootRef, () => {
 		if (!active) return;
