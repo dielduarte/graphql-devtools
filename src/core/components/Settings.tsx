@@ -42,9 +42,7 @@ function Settings({ send, current }: SettingsProps) {
 
 	useOnOutsideClick(rootRef, () => {
 		if (!active) return;
-
 		setUrls();
-
 		setModalStatus(ModalStatus.close);
 	});
 
