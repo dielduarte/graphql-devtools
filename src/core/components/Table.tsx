@@ -6,6 +6,7 @@ import RequestName from './RequestName';
 
 import styles from './Table.module.css';
 import { compareRequests } from './Table.utils';
+import useGetClassNames from 'hooks/useGetClassNames';
 
 interface TableProps {
   requests: CoreRequest[];
@@ -14,18 +15,17 @@ interface TableProps {
   onRequestSelected: (request: CoreRequest) => void;
 }
 
-function Table({
-  requests,
-  requestsMetaDataById,
-  selectedRequest,
-  onRequestSelected,
-}: TableProps) {
+type TableStylesProps = Record<'isActive', boolean>;
+
+function Table({ requests, requestsMetaDataById, selectedRequest, onRequestSelected }: TableProps) {
   const handleOnRequestSelected = useCallback(
     (request: CoreRequest) => () => {
       onRequestSelected(request);
     },
-    [onRequestSelected]
+    [onRequestSelected],
   );
+
+  const getClassNames = useGetClassNames<TableStylesProps>(styles);
 
   return (
     <table className={styles.table}>
@@ -42,16 +42,13 @@ function Table({
 
       <tbody>
         {requests.map((request: CoreRequest) => {
-          const { queryName, statusCode, operation } = requestsMetaDataById[
-            request.requestId
-          ];
+          const { queryName, statusCode, operation } = requestsMetaDataById[request.requestId];
           return (
             <tr
               key={request.requestId}
               onClick={handleOnRequestSelected(request)}
-              className={classNames({
-                [styles.isActive]:
-                  selectedRequest && compareRequests(request, selectedRequest),
+              className={getClassNames({
+                isActive: selectedRequest && compareRequests(request, selectedRequest),
               })}
             >
               <td>

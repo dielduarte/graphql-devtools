@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { ReactComponent as RequestIcon } from '../../icons/settings.svg';
 import styles from './Settings.module.css';
 import useOnOutsideClick from '../../hooks/useOnOutsideClick';
+import useGetClassNames from 'hooks/useGetClassNames';
 
 interface SettingsProps {
   send: Sender<CoreEvents>;
@@ -16,15 +17,15 @@ enum ModalStatus {
   close,
 }
 
+type SettingsStylesProps = Record<'iconBox' | 'active', boolean>;
+
 function Settings({ send, current }: SettingsProps) {
   const [modalStatus, setModalStatus] = useState<ModalStatus>(ModalStatus.close);
   const rootRef = useRef(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const active = modalStatus === ModalStatus.open;
-  const iconBoxClassName = classNames({
-    [styles.iconBox]: true,
-    active: active,
-  });
+
+  const getClassNames = useGetClassNames<SettingsStylesProps>(styles);
 
   const setUrls = () => {
     send({
@@ -48,7 +49,13 @@ function Settings({ send, current }: SettingsProps) {
 
   return (
     <div ref={rootRef} className={styles.settings}>
-      <div className={iconBoxClassName} onClick={toggleSettingMenu}>
+      <div
+        className={getClassNames({
+          iconBox: true,
+          active: true,
+        })}
+        onClick={toggleSettingMenu}
+      >
         {!active && !current.context.settings.urls.length && <div className={styles.alert} />}
         <RequestIcon />
       </div>
