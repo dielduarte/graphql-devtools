@@ -15,7 +15,7 @@
     "graphql": "^14.6.0",
     "graphql.js": "^0.6.6",
     "object-path-immutable": "^4.1.0",
-    "prettier": "^2.0.2",
+    "prettier": "^2.0.5",
     "prismjs": "^1.19.0",
     "ramda": "^0.26.1",
     "react": "^16.12.0",
@@ -35,6 +35,22 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{ts,tsx}": [
+        "eslint --fix",
+        "prettier --write",
+        "git add"
+      ],
+      "*.{css}": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "**/CHANGELOG.*"
+    ]
   },
   "browserslist": {
     "production": [
@@ -57,6 +73,12 @@
     "@types/prettier": "^2.0.0",
     "@types/prismjs": "^1.16.0",
     "babel-loader": "^8.0.6",
+    "cz-conventional-changelog": "3.2.0",
     "webpack-extension-reloader": "^1.1.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
