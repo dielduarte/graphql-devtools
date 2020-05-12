@@ -37,14 +37,12 @@
     "extends": "react-app"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,json}": [
+    "*.{ts,tsx,js}": [
       "eslint --fix",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.{css}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "browserslist": {
