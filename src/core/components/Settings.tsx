@@ -17,9 +17,7 @@ enum ModalStatus {
 }
 
 function Settings({ send, current }: SettingsProps) {
-  const [modalStatus, setModalStatus] = useState<ModalStatus>(
-    ModalStatus.close
-  );
+  const [modalStatus, setModalStatus] = useState<ModalStatus>(ModalStatus.close);
   const rootRef = useRef(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const active = modalStatus === ModalStatus.open;
@@ -28,29 +26,30 @@ function Settings({ send, current }: SettingsProps) {
     active: active,
   });
 
-  const handleOnClick = useCallback(() => {
-    setModalStatus(active ? ModalStatus.close : ModalStatus.open);
-  }, [active]);
-
-  useOnOutsideClick(rootRef, () => {
-    if (!active) return;
-
+  const setUrls = () => {
     send({
       type: 'SET_URLS',
       payload: {
         urls: textAreaRef.current ? textAreaRef.current.value : '',
       },
     });
+  };
 
+  const toggleSettingMenu = () => {
+    setModalStatus(active ? ModalStatus.close : ModalStatus.open);
+    setUrls();
+  };
+
+  useOnOutsideClick(rootRef, () => {
+    if (!active) return;
+    setUrls();
     setModalStatus(ModalStatus.close);
   });
 
   return (
     <div ref={rootRef} className={styles.settings}>
-      <div className={iconBoxClassName} onClick={handleOnClick}>
-        {!active && !current.context.settings.urls.length && (
-          <div className={styles.alert} />
-        )}
+      <div className={iconBoxClassName} onClick={toggleSettingMenu}>
+        {!active && !current.context.settings.urls.length && <div className={styles.alert} />}
         <RequestIcon />
       </div>
       {active && (
