@@ -15,7 +15,7 @@
     "graphql": "^14.6.0",
     "graphql.js": "^0.6.6",
     "object-path-immutable": "^4.1.0",
-    "prettier": "^2.0.2",
+    "prettier": "^2.0.5",
     "prismjs": "^1.19.0",
     "ramda": "^0.26.1",
     "react": "^16.12.0",
@@ -36,6 +36,15 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css}": [
+      "prettier --write"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -50,6 +59,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
+    "@commitlint/config-conventional": "^8.3.4",
     "@storybook/addon-actions": "^5.2.7",
     "@storybook/addon-links": "^5.2.7",
     "@storybook/addons": "^5.2.7",
@@ -57,6 +67,21 @@
     "@types/prettier": "^2.0.0",
     "@types/prismjs": "^1.16.0",
     "babel-loader": "^8.0.6",
+    "commitlint": "^8.3.5",
+    "cz-conventional-changelog": "3.2.0",
+    "husky": ">=4",
+    "lint-staged": ">=10",
     "webpack-extension-reloader": "^1.1.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   }
 }
