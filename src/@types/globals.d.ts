@@ -5,3 +5,5 @@ declare interface AnyObject {
 }
 
 declare var chrome;
+
+declare module 'react-dark-mode-toggle';

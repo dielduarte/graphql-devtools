@@ -2,10 +2,78 @@ import React, { useCallback } from 'react';
 import classNames from 'classnames';
 
 import Status from './Status';
-import RequestName from './RequestName';
 
-import styles from './Table.module.css';
 import { compareRequests } from './Table.utils';
+import { styled } from 'stitches.config';
+
+const Table = styled('table', {
+  borderCollapse: 'collapse',
+  borderSpacing: 0,
+  color: '$bg4',
+
+  'th:first-child, tr td:first-child': {
+    width: '335px',
+    paddingLeft: '8px',
+    textAlign: 'left',
+  },
+
+  'th:nth-child(2), td:nth-child(2)': {
+    width: '110px',
+    textAlign: 'right',
+    paddingRight: '8px',
+  },
+
+  th: {
+    padding: '$3 0 $3 0',
+    fontWeight: '$regular',
+  },
+
+  '> tbody > tr > td': {
+    padding: '$3',
+  },
+
+  '> tbody > tr:hover': {
+    background: '$secondary',
+    cursor: 'pointer',
+    color: '$bg4',
+  },
+
+  '> tbody > tr.isActive': {
+    background: '$primary',
+    color: '$white',
+
+    ':hover': {
+      background: '$primary',
+      color: '$white',
+    },
+
+    '.status': {
+      color: '$white',
+      fill: '$white',
+    },
+  },
+});
+
+const Operation = styled('div', {
+  width: '4px',
+  height: '4px',
+  borderRadius: '$half',
+  display: 'inline-block',
+  marginRight: '$2',
+  position: 'relative',
+  top: '-2px',
+
+  variants: {
+    operation: {
+      query: {
+        background: '$success',
+      },
+      mutation: {
+        background: '$warning',
+      },
+    },
+  },
+});
 
 interface TableProps {
   requests: CoreRequest[];
@@ -14,58 +82,47 @@ interface TableProps {
   onRequestSelected: (request: CoreRequest) => void;
 }
 
-function Table({
-  requests,
-  requestsMetaDataById,
-  selectedRequest,
-  onRequestSelected,
-}: TableProps) {
+function TableComponent({ requests, requestsMetaDataById, selectedRequest, onRequestSelected }: TableProps) {
   const handleOnRequestSelected = useCallback(
     (request: CoreRequest) => () => {
       onRequestSelected(request);
     },
-    [onRequestSelected]
+    [onRequestSelected],
   );
 
   return (
-    <table className={styles.table}>
+    <Table>
       <thead>
         <tr>
-          <th>
-            <h3>Name</h3>
-          </th>
-          <th>
-            <h3>Status</h3>
-          </th>
+          <th>Name</th>
+          <th>Status</th>
         </tr>
       </thead>
 
       <tbody>
         {requests.map((request: CoreRequest) => {
-          const { queryName, statusCode, operation } = requestsMetaDataById[
-            request.requestId
-          ];
+          const { queryName, statusCode, operation } = requestsMetaDataById[request.requestId];
           return (
             <tr
               key={request.requestId}
               onClick={handleOnRequestSelected(request)}
               className={classNames({
-                [styles.isActive]:
-                  selectedRequest && compareRequests(request, selectedRequest),
+                isActive: selectedRequest && compareRequests(request, selectedRequest),
               })}
             >
               <td>
-                <RequestName queryName={queryName} operation={operation} />
+                <Operation operation={operation} />
+                {queryName}
               </td>
               <td>
-                <Status statusCode={statusCode} />
+                <Status statusCode={statusCode} className="status" />
               </td>
             </tr>
           );
         })}
       </tbody>
-    </table>
+    </Table>
   );
 }
 
-export default Table;
+export default TableComponent;

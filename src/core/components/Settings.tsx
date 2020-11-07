@@ -1,69 +1,63 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import { Sender, State } from 'xstate';
-import classNames from 'classnames';
+import debounce from 'lodash.debounce';
 
-import { ReactComponent as RequestIcon } from '../../icons/settings.svg';
-import styles from './Settings.module.css';
-import useOnOutsideClick from '../../hooks/useOnOutsideClick';
+import { styled } from 'stitches.config';
+import { Tip } from 'core/ui/Tip';
+
+const Container = styled('div', {
+  borderBottom: '1px solid $bg3',
+  padding: '$3',
+  marginBottom: '$3',
+});
+
+const Input = styled('textarea', {
+  background: '$bg3',
+  width: '100%',
+  padding: '$2 $3',
+  color: '$bg4',
+  border: 'none',
+  borderRadius: '$2',
+  resize: 'none',
+  height: '24px',
+  transition: 'height 0.1s linear',
+  lineHeight: '17px',
+
+  ':focus': {
+    height: '100px',
+  },
+});
 
 interface SettingsProps {
   send: Sender<CoreEvents>;
   current: State<CoreContext, CoreEvents>;
 }
 
-enum ModalStatus {
-  open,
-  close,
-}
-
 function Settings({ send, current }: SettingsProps) {
-  const [modalStatus, setModalStatus] = useState<ModalStatus>(ModalStatus.close);
-  const rootRef = useRef(null);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const active = modalStatus === ModalStatus.open;
-  const iconBoxClassName = classNames({
-    [styles.iconBox]: true,
-    active: active,
-  });
-
-  const setUrls = () => {
+  const setUrls = (e: ChangeEvent<HTMLTextAreaElement>) => {
     send({
       type: 'SET_URLS',
       payload: {
-        urls: textAreaRef.current ? textAreaRef.current.value : '',
+        urls: e.target.value,
       },
     });
   };
 
-  const toggleSettingMenu = () => {
-    setModalStatus(active ? ModalStatus.close : ModalStatus.open);
-    setUrls();
-  };
-
-  useOnOutsideClick(rootRef, () => {
-    if (!active) return;
-    setUrls();
-    setModalStatus(ModalStatus.close);
-  });
+  const debouncedSetUrls = debounce(setUrls, 300);
 
   return (
-    <div ref={rootRef} className={styles.settings}>
-      <div className={iconBoxClassName} onClick={toggleSettingMenu}>
-        {!active && !current.context.settings.urls.length && <div className={styles.alert} />}
-        <RequestIcon />
-      </div>
-      {active && (
-        <div className={styles.inputContainer}>
-          <h3>separated by comma add URLs to start watching</h3>
-          <textarea
-            defaultValue={current.context.settings.urls.join(', ')}
-            ref={textAreaRef}
-            className={styles.textArea}
-            placeholder="https://myapi.rocks/graphql, https://otherapi.com/graphql"
-          />
-        </div>
-      )}
-    </div>
+    <Container>
+      <Tip content="To watch multiple urls, type it separated by comma.">
+        <Input
+          placeholder="Paste URL here to watch..."
+          defaultValue={current.context.settings.urls.join(', ')}
+          onChange={(e) => {
+            e.persist();
+            debouncedSetUrls(e);
+          }}
+        />
+      </Tip>
+    </Container>
   );
 }
 
