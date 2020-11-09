@@ -1,18 +1,36 @@
 import React from 'react';
+import { styled } from 'stitches.config';
 
-import styles from './Message.module.css';
+const Container = styled('div', {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  color: '$bg4',
+});
+
+const Title = styled('h3', {
+  fontSize: '$2',
+  fontWeight: '$bold',
+});
+
+const Description = styled('p', {
+  fontWeight: '$regular',
+});
 
 interface MessageProps {
-  Icon: React.ReactElement;
   message: string;
+  title: string;
 }
 
-function Message({ Icon, message }: MessageProps) {
+function Message({ message, title }: MessageProps) {
   return (
-    <div className={styles.root}>
-      {Icon}
-      <p dangerouslySetInnerHTML={{ __html: message }} />
-    </div>
+    <Container>
+      <Title>{title}</Title>
+      <Description>{message}</Description>
+    </Container>
   );
 }
 

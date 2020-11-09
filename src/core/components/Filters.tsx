@@ -1,6 +1,12 @@
 import React from 'react';
-import { getFilterClassNames } from './Filters.utils';
 import { Sender, State } from 'xstate';
+import { styled } from 'stitches.config';
+import { Button } from '../ui/Button';
+
+const Container = styled('div', {
+  paddingLeft: '$3',
+  marginBottom: '$4',
+});
 
 interface FiltersProps {
   send: Sender<CoreEvents>;
@@ -9,34 +15,17 @@ interface FiltersProps {
 
 function Filters({ send, current }: FiltersProps) {
   return (
-    <>
-      <button
-        className={getFilterClassNames({
-          active: current.matches('core.listingRequests.all'),
-        })}
-        onClick={() => send('SHOW_ALL')}
-      >
+    <Container>
+      <Button active={current.matches('core.listingRequests.all')} onClick={() => send('SHOW_ALL')}>
         All
-      </button>
-      <button
-        className={getFilterClassNames({
-          isQuery: true,
-          active: current.matches('core.listingRequests.queries'),
-        })}
-        onClick={() => send('FILTER_BY_QUERIES')}
-      >
+      </Button>
+      <Button active={current.matches('core.listingRequests.queries')} onClick={() => send('FILTER_BY_QUERIES')}>
         Queries
-      </button>
-      <button
-        className={getFilterClassNames({
-          isMutation: true,
-          active: current.matches('core.listingRequests.mutations'),
-        })}
-        onClick={() => send('FILTER_BY_MUTATIONS')}
-      >
+      </Button>
+      <Button active={current.matches('core.listingRequests.mutations')} onClick={() => send('FILTER_BY_MUTATIONS')}>
         Mutations
-      </button>
-    </>
+      </Button>
+    </Container>
   );
 }
 

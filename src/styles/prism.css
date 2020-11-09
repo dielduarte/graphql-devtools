@@ -6,9 +6,15 @@ https://prismjs.com/download.html#themes=prism-tomorrow&languages=graphql+json *
  * @author Rose Pritchard
  */
 
+body.theme-0 code[class*="language-"],
+body.theme-0 pre[class*="language-"],
+body.theme-0 .token.punctuation {
+	color: #A1A1A1;
+}
+
 code[class*="language-"],
 pre[class*="language-"] {
-	color: #ccc;
+	color: #6E6E6E;
 	background: none;
 	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 	font-size: 1em;
@@ -58,7 +64,7 @@ pre[class*="language-"] {
 }
 
 .token.punctuation {
-	color: #ccc;
+	color: #6E6E6E;
 }
 
 .token.tag,

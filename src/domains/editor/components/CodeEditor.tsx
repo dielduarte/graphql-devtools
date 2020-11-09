@@ -1,15 +1,60 @@
 import React, { memo, useEffect, useCallback } from 'react';
 
 import '../../../styles/prism.css';
-import styles from './CodeEditor.module.css';
 import { useMachine } from '@xstate/react';
 import machine from '../machine';
-import EditorActions from './EditorActions';
-import ContextTabs from './ContextTabs';
 import { EditorContext } from '../_types';
 import { ReactComponent as CopyIcon } from 'icons/copy.svg';
 import { ReactComponent as RefetchIcon } from 'icons/refetch.svg';
-import { TAB_COLORS } from '../constants';
+
+import { Button } from 'core/ui/Button';
+import { Divider } from 'core/ui/Divider';
+import { styled } from 'stitches.config';
+import { Tip } from 'core/ui/Tip';
+
+const Editor = styled('div', {
+  height: '100%',
+  background: '$bg1',
+});
+
+const Header = styled('header', {
+  position: 'sticky',
+  top: 0,
+  background: '$bg1',
+  padding: '$3',
+  display: 'flex',
+  alignItems: 'center',
+
+  svg: {
+    cursor: 'pointer',
+  },
+});
+
+const Pre = styled('pre', {
+  /* margin with important due to primsjs global styles :/ */
+  margin: '0 !important',
+  padding: '$3',
+});
+
+const Action = styled('button', {
+  border: 'none',
+  padding: '$3',
+  borderRadius: '$2',
+  display: 'flex',
+  background: 'transparent',
+
+  variants: {
+    active: {
+      true: {
+        background: '$primary',
+
+        '> svg > path': {
+          fill: '$white',
+        },
+      },
+    },
+  },
+});
 
 interface CodeEditorProps {
   selectedRequest: CoreRequest;
@@ -19,6 +64,7 @@ interface CodeEditorProps {
 function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
   const [current, send] = useMachine(machine);
   const { highlights, activeContext } = current.context;
+  const isMutation = requestMetaDataById.operation !== 'query';
 
   const handleSetActiveContext = useCallback(
     (editorContext: EditorContext) => () => {
@@ -27,7 +73,7 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
         payload: { editorContext },
       });
     },
-    [send]
+    [send],
   );
 
   useEffect(() => {
@@ -38,64 +84,41 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
   }, [selectedRequest, requestMetaDataById, send]);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.editor}>
-        <pre className={styles.code}>
-          <code
-            className={'language-graphql'}
-            dangerouslySetInnerHTML={{ __html: highlights[activeContext] }}
-          />
-        </pre>
-        <EditorActions className={styles.action}>
-          <EditorActions.Action
-            Icon={<RefetchIcon />}
-            onClick={() => send('REFETCH_OPERATION')}
-            success={current.matches('operationRefetchedSuccessfully')}
-            loading={current.matches('refetchingOperation')}
-          />
-          <EditorActions.Action
-            Icon={<CopyIcon />}
-            onClick={() => send('COPY_CONTEXT')}
-            success={current.matches('contextCopiedSuccessfully')}
-          />
-        </EditorActions>
-      </div>
-
-      <ContextTabs className={styles.tabs}>
-        <ContextTabs.Tab
-          title={'Query'}
-          background={TAB_COLORS.query}
-          hide={
-            activeContext === EditorContext.query ||
-            requestMetaDataById.operation !== 'query'
-          }
-          onClick={handleSetActiveContext(EditorContext.query)}
-        />
-
-        <ContextTabs.Tab
-          title={'Mutation'}
-          background={TAB_COLORS.mutation}
-          hide={
-            activeContext === EditorContext.query ||
-            requestMetaDataById.operation !== 'mutation'
-          }
-          onClick={handleSetActiveContext(EditorContext.query)}
-        />
-
-        <ContextTabs.Tab
-          title="Variables"
-          background={TAB_COLORS.variables}
-          hide={activeContext === EditorContext.variables}
+    <Editor>
+      <Header>
+        <Button active={activeContext === EditorContext.query} onClick={handleSetActiveContext(EditorContext.query)}>
+          {isMutation ? 'Mutation' : 'Query'}
+        </Button>
+        <Button
+          active={activeContext === EditorContext.variables}
           onClick={handleSetActiveContext(EditorContext.variables)}
-        />
-        <ContextTabs.Tab
-          title="Headers"
-          background={TAB_COLORS.headers}
-          hide={activeContext === EditorContext.Headers}
+        >
+          Variables
+        </Button>
+        <Button
+          active={activeContext === EditorContext.Headers}
           onClick={handleSetActiveContext(EditorContext.Headers)}
-        />
-      </ContextTabs>
-    </div>
+        >
+          Headers
+        </Button>
+
+        <Divider />
+
+        <Tip content={isMutation ? 'Refetch mutation' : 'Refetch query'}>
+          <Action onClick={() => send('REFETCH_OPERATION')} active={current.matches('operationRefetchedSuccessfully')}>
+            <RefetchIcon />
+          </Action>
+        </Tip>
+        <Tip content={'Copy query'}>
+          <Action onClick={() => send('COPY_CONTEXT')} active={current.matches('contextCopiedSuccessfully')}>
+            <CopyIcon />
+          </Action>
+        </Tip>
+      </Header>
+      <Pre>
+        <code className={'language-graphql'} dangerouslySetInnerHTML={{ __html: highlights[activeContext] }} />
+      </Pre>
+    </Editor>
   );
 }
 
