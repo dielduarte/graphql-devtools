@@ -1,7 +1,7 @@
 {
   "name": "Graphql-devtools",
-  "version": "0.0.2",
-  "description": "Build an Extension!",
+  "version": "0.0.7",
+  "description": "Frameworkless devtool that works regardless of the graphql client being used, keep the same experience debugging your queries.",
   "manifest_version": 2,
   "devtools_page": "devtools.html",
   "content_security_policy": "script-src 'self' 'sha256-e6xwqkcX4TaZG2PRLQTbNzBEDY664zBiJY65FQB1oDw='; object-src 'self'",

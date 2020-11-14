@@ -61,7 +61,7 @@ function HeaderLayout() {
     <Header>
       <Title>GraphQl Devtools</Title>
       <Contribute>
-        <Version>v.0.1</Version>
+        <Version>v0.0.7</Version>
 
         <Divider />
 
