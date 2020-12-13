@@ -2,20 +2,12 @@ import { Sender } from 'xstate';
 import { getUrls } from './_utils/context';
 import * as chromeListeners from './_utils/chromeListeners';
 import { parseHeaders } from './_utils/services';
-
-export const registerChromeEvents = () => (
-  send: Sender<CoreEvents>,
-  onReceive: any
-) => {
+import { REQUEST_ID_HEADER } from './constants';
+export const registerChromeEvents = () => (send: Sender<CoreEvents>, onReceive: any) => {
   function onBeforeRequest(details: any) {
     if (details.requestBody.raw[0]) {
       const queryDetails = JSON.parse(
-        decodeURIComponent(
-          String.fromCharCode.apply(
-            null,
-            new Uint8Array(details.requestBody.raw[0].bytes) as any
-          )
-        )
+        decodeURIComponent(String.fromCharCode.apply(null, new Uint8Array(details.requestBody.raw[0].bytes) as any)),
       );
 
       send({
@@ -62,6 +54,10 @@ export const registerChromeEvents = () => (
         requestHeaders: parseHeaders(details.requestHeaders),
       },
     });
+
+    details.requestHeaders.push({ name: REQUEST_ID_HEADER, value: details.requestId });
+
+    return { requestHeaders: details.requestHeaders };
   }
 
   function registerAllEvents(urls: string[]) {
@@ -72,8 +68,33 @@ export const registerChromeEvents = () => (
         onCompleted,
         onErrorOccurred,
         onBeforeSendHeaders,
-      })
+      }),
     );
+  }
+
+  function registerOnRequestFinished() {
+    chrome.devtools.network.onRequestFinished.addListener((request: any) => {
+      const urls = JSON.parse(localStorage.getItem('urls_') ?? '');
+
+      request.getContent((data: string) => {
+        if (request.request && request.request.url) {
+          const { url: requestUrl, headers } = request.request;
+          const shouldSendMessage = urls.some((url: string) => requestUrl.includes(url));
+
+          if (shouldSendMessage) {
+            const requestId = headers.filter((header: any) => header.name === REQUEST_ID_HEADER)[0].value;
+
+            send({
+              type: 'SET_REQUEST_RETURN_DATA',
+              payload: {
+                requestId,
+                data,
+              },
+            });
+          }
+        }
+      });
+    });
   }
 
   const initialUrls = getUrls();
@@ -81,6 +102,8 @@ export const registerChromeEvents = () => (
   if (initialUrls.length) {
     registerAllEvents(initialUrls);
   }
+
+  registerOnRequestFinished();
 
   onReceive((e: any) => {
     if (e.type !== 'UPDATE_CHROME_LISTENERS') return;

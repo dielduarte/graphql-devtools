@@ -5,27 +5,18 @@ import { requestExist } from './_utils/actions';
 import { URLS_STORAGE_KEY } from './constants';
 
 export const addRequest = assign<CoreContext, CoreEvents>({
-  requests: (context, event) => [
-    (event as ON_REQUEST).payload.request,
-    ...context.requests,
-  ],
+  requests: (context, event) => [(event as ON_REQUEST).payload.request, ...context.requests],
   requestsMetaDataById: (context, event) => {
-    const { queryName, operation } = getOperationDetails(
-      (event as ON_REQUEST).payload.request
-    );
+    const { queryName, operation } = getOperationDetails((event as ON_REQUEST).payload.request);
 
-    return immutable.set(
-      context.requestsMetaDataById,
-      (event as ON_REQUEST).payload.request.requestId,
-      {
-        queryName,
-        operation,
-        statusCode: 'loading',
-        timeStamp: {
-          start: new Date().getTime(),
-        },
-      }
-    );
+    return immutable.set(context.requestsMetaDataById, (event as ON_REQUEST).payload.request.requestId, {
+      queryName,
+      operation,
+      statusCode: 'loading',
+      timeStamp: {
+        start: new Date().getTime(),
+      },
+    });
   },
 });
 
@@ -35,18 +26,15 @@ export const setRequestAsComplete = assign<CoreContext, CoreEvents>({
 
     if (!requestExist(context, requestId)) return context.requestsMetaDataById;
 
-    return (immutable.update(
-      context.requestsMetaDataById,
-      requestId,
-      (request) =>
-        immutable
-          .wrap(request)
-          .set('statusCode', statusCode)
-          .update('timeStamp', (timeStamp) => ({
-            ...timeStamp,
-            end: new Date().getTime(),
-          }))
-          .value()
+    return (immutable.update(context.requestsMetaDataById, requestId, (request) =>
+      immutable
+        .wrap(request)
+        .set('statusCode', statusCode)
+        .update('timeStamp', (timeStamp) => ({
+          ...timeStamp,
+          end: new Date().getTime(),
+        }))
+        .value(),
     ) as unknown) as { [key: string]: CoreRequestMetaData };
   },
 });
@@ -57,42 +45,33 @@ export const setRequestStatusCode = assign<CoreContext, CoreEvents>({
 
     if (!requestExist(context, requestId)) return context.requestsMetaDataById;
 
-    return (immutable.update(
-      context.requestsMetaDataById,
-      requestId,
-      (request) =>
-        immutable
-          .wrap(request)
-          .set('statusCode', statusCode)
-          .update('timeStamp', (timeStamp) => ({
-            ...timeStamp,
-            end: new Date().getTime(),
-          }))
-          .value()
+    return (immutable.update(context.requestsMetaDataById, requestId, (request) =>
+      immutable
+        .wrap(request)
+        .set('statusCode', statusCode)
+        .update('timeStamp', (timeStamp) => ({
+          ...timeStamp,
+          end: new Date().getTime(),
+        }))
+        .value(),
     ) as unknown) as { [key: string]: CoreRequestMetaData };
   },
 });
 
 export const setRequestHeaders = assign<CoreContext, CoreEvents>({
   requestsMetaDataById: (context, event) => {
-    const {
-      requestId,
-      requestHeaders,
-    } = (event as ON_BEFORE_SEND_HEADERS).payload;
+    const { requestId, requestHeaders } = (event as ON_BEFORE_SEND_HEADERS).payload;
 
     if (!requestExist(context, requestId)) return context.requestsMetaDataById;
 
-    return (immutable.update(
-      context.requestsMetaDataById,
-      requestId,
-      (request) => immutable.set(request, 'headers', requestHeaders)
+    return (immutable.update(context.requestsMetaDataById, requestId, (request) =>
+      immutable.set(request, 'headers', requestHeaders),
     ) as unknown) as { [key: string]: CoreRequestMetaData };
   },
 });
 
 export const setSelectedRequest = assign<CoreContext, CoreEvents>({
-  selectedRequest: (_, event) =>
-    (event as OPEN_REQUEST_DETAILS).payload.request,
+  selectedRequest: (_, event) => (event as OPEN_REQUEST_DETAILS).payload.request,
 });
 
 export const parseURLs = assign<CoreContext, CoreEvents>({
@@ -102,9 +81,7 @@ export const parseURLs = assign<CoreContext, CoreEvents>({
     }
 
     return {
-      urls: (event as SET_URLS).payload.urls
-        .split(',')
-        .map((it) => it.replace(/\s/g, '')), // Remove any whitespace
+      urls: (event as SET_URLS).payload.urls.split(',').map((it) => it.replace(/\s/g, '')), // Remove any whitespace
     };
   },
 });
@@ -115,4 +92,16 @@ export const saveURLsToLocalStorage = (context: CoreContext) => {
 
 export const cleanSelectedRequest = assign<CoreContext, CoreEvents>({
   selectedRequest: undefined,
+});
+
+export const setRequestReturnData = assign<CoreContext, CoreEvents>({
+  requestsMetaDataById: (context, event) => {
+    const { requestId, data } = (event as SET_REQUEST_RETURN_DATA).payload;
+
+    if (!requestExist(context, requestId)) return context.requestsMetaDataById;
+
+    return (immutable.update(context.requestsMetaDataById, requestId, (request) =>
+      immutable.set(request, 'data', JSON.parse(data)),
+    ) as unknown) as { [key: string]: CoreRequestMetaData };
+  },
 });

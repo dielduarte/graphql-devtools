@@ -101,6 +101,9 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
         >
           Headers
         </Button>
+        <Button active={activeContext === EditorContext.data} onClick={handleSetActiveContext(EditorContext.data)}>
+          Data
+        </Button>
 
         <Divider />
 
@@ -109,7 +112,7 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
             <RefetchIcon />
           </Action>
         </Tip>
-        <Tip content={'Copy query'}>
+        <Tip content={`Copy ${activeContext}`}>
           <Action onClick={() => send('COPY_CONTEXT')} active={current.matches('contextCopiedSuccessfully')}>
             <CopyIcon />
           </Action>

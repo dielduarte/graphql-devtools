@@ -4,6 +4,7 @@ export enum EditorContext {
   query = 'query',
   variables = 'variables',
   Headers = 'headers',
+  data = 'data',
 }
 
 export interface COPY_CONTEXT {
@@ -29,11 +30,7 @@ export interface REFETCH_OPERATION {
   type: 'REFETCH_OPERATION';
 }
 
-export type CodeEditorEvents =
-  | SET_SELECTED_REQUEST
-  | COPY_CONTEXT
-  | SET_ACTIVE_CONTEXT
-  | REFETCH_OPERATION;
+export type CodeEditorEvents = SET_SELECTED_REQUEST | COPY_CONTEXT | SET_ACTIVE_CONTEXT | REFETCH_OPERATION;
 
 export interface CodeEditorSchema {
   states: {
@@ -54,12 +51,9 @@ export interface CodeEditorContext {
     query: string;
     variables: string;
     headers: string;
+    data: string;
   };
   activeContext: EditorContext;
 }
 
-export type CodeEditorMachine = MachineConfig<
-  CodeEditorContext,
-  CodeEditorSchema,
-  CodeEditorEvents
->;
+export type CodeEditorMachine = MachineConfig<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>;

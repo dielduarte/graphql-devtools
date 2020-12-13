@@ -21,6 +21,7 @@ declare global {
       end?: number;
     };
     headers: AnyObject;
+    data?: Record<string, any>;
   }
 
   // The events that the machine handles
@@ -77,6 +78,14 @@ declare global {
     type: 'SHOW_ALL';
   }
 
+  interface SET_REQUEST_RETURN_DATA {
+    type: 'SET_REQUEST_RETURN_DATA';
+    payload: {
+      requestId: string;
+      data: string;
+    };
+  }
+
   type CoreEvents =
     | ON_REQUEST
     | ON_REQUEST_COMPLETE
@@ -87,7 +96,8 @@ declare global {
     | SET_URLS
     | FILTER_BY_QUERIES
     | FILTER_BY_MUTATION
-    | SHOW_ALL;
+    | SHOW_ALL
+    | SET_REQUEST_RETURN_DATA;
 
   interface CoreSchema {
     states: {

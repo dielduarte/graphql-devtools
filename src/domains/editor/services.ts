@@ -10,15 +10,17 @@ export const copyContext = (context: CodeEditorContext) => {
       activeContext,
     } = context;
 
+    const shouldGetFromSelectedRequestObject = [EditorContext.query, EditorContext.variables];
+
     try {
-      if (activeContext !== EditorContext.Headers) {
+      if (shouldGetFromSelectedRequestObject.includes(activeContext)) {
         copyToClipBoard(
           activeContext === EditorContext.query
             ? formatQuery(selectedRequest!.query)
-            : formatJson(selectedRequest!.variables || {})
+            : formatJson(selectedRequest!.variables || {}),
         );
       } else {
-        copyToClipBoard(formatJson(requestMetaDataById!.headers));
+        copyToClipBoard(formatJson(requestMetaDataById?.[activeContext] ?? {}));
       }
 
       resolve();

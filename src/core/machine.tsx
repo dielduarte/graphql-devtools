@@ -52,6 +52,10 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             ],
             target: '',
           },
+          SET_REQUEST_RETURN_DATA: {
+            actions: ['setRequestReturnData'],
+            target: '',
+          },
         },
         initial: 'listingRequests',
         states: {
@@ -84,5 +88,5 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
     actions,
     services,
-  }
+  },
 );
