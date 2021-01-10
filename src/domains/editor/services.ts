@@ -4,13 +4,16 @@ import { copyToClipBoard, formatQuery, formatJson } from './_utils';
 import { EditorContext, CodeEditorContext } from './_types';
 
 export const copyContext = (context: CodeEditorContext) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const {
       external: { selectedRequest, requestMetaDataById },
       activeContext,
     } = context;
 
-    const shouldGetFromSelectedRequestObject = [EditorContext.query, EditorContext.variables];
+    const shouldGetFromSelectedRequestObject = [
+      EditorContext.query,
+      EditorContext.variables,
+    ];
 
     try {
       if (shouldGetFromSelectedRequestObject.includes(activeContext)) {

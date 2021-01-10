@@ -8,6 +8,7 @@ import DarkModeToggle from 'react-dark-mode-toggle';
 import { darkThemeClass } from 'stitches.config';
 import { Sender, State } from 'xstate';
 import { Tip } from 'core/ui/Tip';
+import appJson from 'app.json';
 
 const Header = styled('header', {
   background: '$bg1',
@@ -72,7 +73,7 @@ function HeaderLayout({ send, current }: HeaderLayoutProps) {
     <Header>
       <Title>GraphQl Devtools</Title>
       <Contribute>
-        <Version>v0.0.8</Version>
+        <Version>v{appJson.version}</Version>
 
         <Divider />
 
