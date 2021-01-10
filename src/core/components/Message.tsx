@@ -12,7 +12,7 @@ const Container = styled('div', {
 });
 
 const Title = styled('h3', {
-  fontSize: '$2',
+  fontSize: '$3',
   fontWeight: '$bold',
 });
 

@@ -27,7 +27,7 @@ export const FixedElement = styled('div', {
   position: 'sticky',
   top: 0,
   background: '$bg2',
-  zIndex: 1,
+  zIndex: '$0',
 });
 
 interface GridProps {

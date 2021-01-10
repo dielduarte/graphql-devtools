@@ -19,7 +19,8 @@ export const { styled, css } = createStyled({
     },
     fontSizes: {
       $1: '12px',
-      $2: '20px',
+      $2: '14px',
+      $3: '20px',
     },
     fonts: {
       $roboto: 'Roboto, sans-serif',
@@ -42,6 +43,10 @@ export const { styled, css } = createStyled({
       $3: getSize(3),
       $4: getSize(4),
       $half: '50%',
+    },
+    zIndices: {
+      $0: '1',
+      $1: '2',
     },
   },
 });

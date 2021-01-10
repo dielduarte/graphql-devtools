@@ -10,6 +10,7 @@ import CodeEditor from './domains/editor/components/CodeEditor';
 import Header from 'layouts/Header';
 import Grid, { FixedElement } from './layouts/Grid';
 import Message from 'core/components/Message';
+import Preferences from 'core/components/Preferences';
 import { filterOperations } from 'core/_utils/operation';
 
 function App() {
@@ -19,7 +20,10 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header send={send} current={current} />
+      {current.matches('core.openPreferences') && (
+        <Preferences current={current} send={send} />
+      )}
       <Grid
         Left={
           <>
@@ -28,7 +32,9 @@ function App() {
               <Filters send={send} current={current} />
             </FixedElement>
             <Table
-              onRequestSelected={(request) => send({ type: 'OPEN_REQUEST_DETAILS', payload: { request } })}
+              onRequestSelected={(request) =>
+                send({ type: 'OPEN_REQUEST_DETAILS', payload: { request } })
+              }
               requests={filteredRequests}
               requestsMetaDataById={requestsMetaDataById}
               selectedRequest={selectedRequest}
@@ -38,7 +44,9 @@ function App() {
         Right={
           Boolean(current.context.selectedRequest) ? (
             <CodeEditor
-              requestMetaDataById={requestsMetaDataById[selectedRequest!.requestId]}
+              requestMetaDataById={
+                requestsMetaDataById[selectedRequest!.requestId]
+              }
               selectedRequest={selectedRequest!}
             />
           ) : (

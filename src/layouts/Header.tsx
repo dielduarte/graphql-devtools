@@ -1,9 +1,13 @@
 import React from 'react';
 import { styled } from 'stitches.config';
 import { ReactComponent as GitHubIcon } from '../icons/github.svg';
+import { ReactComponent as GearIcon } from '../icons/gear.svg';
+import { ReactComponent as CloseIcon } from '../icons/close.svg';
 import { Divider } from 'core/ui/Divider';
 import DarkModeToggle from 'react-dark-mode-toggle';
 import { darkThemeClass } from 'stitches.config';
+import { Sender, State } from 'xstate';
+import { Tip } from 'core/ui/Tip';
 
 const Header = styled('header', {
   background: '$bg1',
@@ -42,8 +46,15 @@ const Link = styled('a', {
   fontWeight: '$bold',
 });
 
-function HeaderLayout() {
-  const [isDarkMode, setIsDarkMode] = React.useState(JSON.parse(localStorage.getItem('isDarkMode') ?? 'false'));
+interface HeaderLayoutProps {
+  send: Sender<CoreEvents>;
+  current: State<CoreContext, CoreEvents>;
+}
+
+function HeaderLayout({ send, current }: HeaderLayoutProps) {
+  const [isDarkMode, setIsDarkMode] = React.useState(
+    JSON.parse(localStorage.getItem('isDarkMode') ?? 'false'),
+  );
 
   React.useEffect(() => {
     const html = document.querySelector('body');
@@ -65,14 +76,38 @@ function HeaderLayout() {
 
         <Divider />
 
-        <Link href="https://github.com/dielduarte/graphql-devtools" target="_blank" rel="noopener noreferrer">
+        <Link
+          href="https://github.com/dielduarte/graphql-devtools"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Contribute on GitHub
         </Link>
         <GitHubIcon />
 
         <Divider />
 
-        <DarkModeToggle onChange={setIsDarkMode} checked={isDarkMode} size={40} />
+        <DarkModeToggle
+          onChange={setIsDarkMode}
+          checked={isDarkMode}
+          size={40}
+        />
+
+        <Divider />
+
+        {current.matches('core.openPreferences') ? (
+          <Tip content="close preferences" placement="bottom">
+            <Link href="#" onClick={() => send('CLOSE_PREFERENCES')}>
+              <CloseIcon />
+            </Link>
+          </Tip>
+        ) : (
+          <Tip content="open preferences" placement="bottom">
+            <Link href="#" onClick={() => send('OPEN_PREFERENCES')}>
+              <GearIcon />
+            </Link>
+          </Tip>
+        )}
       </Contribute>
     </Header>
   );

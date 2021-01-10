@@ -1,3 +1,4 @@
+import { PreferencesEnum } from 'core/_types';
 import { MachineConfig } from 'xstate';
 
 declare global {
@@ -86,6 +87,23 @@ declare global {
     };
   }
 
+  interface SET_PREFERENCE {
+    type: 'SET_PREFERENCE';
+    payload: { preference: PreferencesEnum; checked: boolean };
+  }
+
+  interface RESET_CONTEXT {
+    type: 'RESET_CONTEXT';
+  }
+
+  interface OPEN_PREFERENCES {
+    type: 'OPEN_PREFERENCES';
+  }
+
+  interface CLOSE_PREFERENCES {
+    type: 'CLOSE_PREFERENCES';
+  }
+
   type CoreEvents =
     | ON_REQUEST
     | ON_REQUEST_COMPLETE
@@ -97,7 +115,11 @@ declare global {
     | FILTER_BY_QUERIES
     | FILTER_BY_MUTATION
     | SHOW_ALL
-    | SET_REQUEST_RETURN_DATA;
+    | SET_REQUEST_RETURN_DATA
+    | SET_PREFERENCE
+    | RESET_CONTEXT
+    | OPEN_PREFERENCES
+    | CLOSE_PREFERENCES;
 
   interface CoreSchema {
     states: {
@@ -110,6 +132,7 @@ declare global {
               queries: {};
             };
           };
+          openPreferences: {};
         };
       };
     };
@@ -121,6 +144,7 @@ declare global {
     selectedRequest?: CoreRequest;
     settings: {
       urls: string[];
+      preferences: Record<PreferencesEnum, boolean>;
     };
   }
 

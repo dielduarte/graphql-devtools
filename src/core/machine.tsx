@@ -1,21 +1,15 @@
 import { Machine, send } from 'xstate';
 import * as actions from './actions';
 import * as services from './services';
-import { getUrls } from './_utils/context';
+import * as guards from './guards';
+import { getInitialContext } from './_utils/context';
 
 export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
     id: 'graphql-devtools',
     initial: 'core',
     strict: true,
-    context: {
-      requests: [],
-      requestsMetaDataById: {},
-      selectedRequest: undefined,
-      settings: {
-        urls: getUrls(),
-      },
-    },
+    context: getInitialContext(),
     states: {
       core: {
         strict: true,
@@ -56,6 +50,21 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
             actions: ['setRequestReturnData'],
             target: '',
           },
+          SET_PREFERENCE: {
+            actions: ['setPreference', 'savePreferences'],
+            target: '',
+          },
+          RESET_CONTEXT: [
+            {
+              target: '',
+              cond: 'isPreserveLogs',
+            },
+            {
+              actions: ['resetContext'],
+              target: '',
+            },
+          ],
+          OPEN_PREFERENCES: 'core.openPreferences',
         },
         initial: 'listingRequests',
         states: {
@@ -81,6 +90,11 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
               queries: {},
             },
           },
+          openPreferences: {
+            on: {
+              CLOSE_PREFERENCES: 'listingRequests',
+            },
+          },
         },
       },
     },
@@ -88,5 +102,6 @@ export default Machine<CoreContext, CoreSchema, CoreEvents>(
   {
     actions,
     services,
+    guards,
   },
 );

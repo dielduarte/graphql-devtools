@@ -5,5 +5,5 @@
   "manifest_version": 2,
   "devtools_page": "devtools.html",
   "content_security_policy": "script-src 'self' 'sha256-e6xwqkcX4TaZG2PRLQTbNzBEDY664zBiJY65FQB1oDw='; object-src 'self'",
-  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>"]
+  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>", "webNavigation", "tabs"]
 }
