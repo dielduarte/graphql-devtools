@@ -1,6 +1,6 @@
 {
   "name": "Graphql-devtools",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Frameworkless devtool that works regardless of the graphql client being used, keep the same experience debugging your queries.",
   "manifest_version": 2,
   "devtools_page": "devtools.html",

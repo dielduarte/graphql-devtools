@@ -133,7 +133,7 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
       <Pre>
         <code
           className={'language-graphql'}
-          dangerouslySetInnerHTML={{ __html: highlights[activeContext] }}
+          dangerouslySetInnerHTML={{ __html: highlights[activeContext] ?? '' }}
         />
       </Pre>
     </Editor>
