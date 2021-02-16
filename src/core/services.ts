@@ -97,7 +97,7 @@ export const registerChromeEvents = () => (
           if (shouldSendMessage) {
             const requestId = headers.filter(
               (header: any) => header.name === REQUEST_ID_HEADER,
-            )[0].value;
+            )[0]?.value;
 
             send({
               type: 'SET_REQUEST_RETURN_DATA',
