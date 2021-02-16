@@ -1,6 +1,10 @@
 import prettier from 'prettier/standalone';
 import parserGraphql from 'prettier/parser-graphql';
 import parserBabel from 'prettier/parser-babel.js';
+import Prism from 'prismjs';
+import memoize from 'fast-memoize';
+import 'prismjs/components/prism-graphql';
+import 'prismjs/components/prism-json';
 
 export const copyToClipBoard = (link: string) => {
   const el = document.createElement('textarea');
@@ -24,3 +28,19 @@ export const formatJson = (json: object) => {
     plugins: [parserBabel],
   });
 };
+
+export const highlightJson = memoize((values?: AnyObject) => {
+  return Prism.highlight(
+    formatJson(values || {}),
+    Prism.languages.json,
+    'json',
+  );
+});
+
+export const highlightQuery = memoize((query?: string) => {
+  return Prism.highlight(
+    formatQuery(query || ''),
+    Prism.languages.graphql,
+    'graphql',
+  );
+});

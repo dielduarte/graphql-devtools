@@ -1,7 +1,13 @@
 import { Machine } from 'xstate';
 import * as actions from './actions';
+import { getIsNewContextCond, getIsContextCond } from './cond';
 import * as services from './services';
-import { CodeEditorContext, CodeEditorSchema, CodeEditorEvents, EditorContext } from './_types';
+import {
+  CodeEditorContext,
+  CodeEditorSchema,
+  CodeEditorEvents,
+  EditorContext,
+} from './_types';
 
 export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
   {
@@ -23,14 +29,62 @@ export default Machine<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>(
     states: {
       idle: {
         on: {
-          SET_ACTIVE_CONTEXT: {
-            target: '.',
-            actions: ['setActiveContext'],
-          },
-          SET_SELECTED_REQUEST: {
-            target: '.',
-            actions: ['setExternalContext', 'setHighLightValues', 'startPrism'],
-          },
+          SET_ACTIVE_CONTEXT: [
+            {
+              target: '.',
+              actions: ['setActiveContext', 'setHighLightQuery'],
+              cond: getIsNewContextCond(EditorContext.query),
+            },
+            {
+              target: '.',
+              actions: ['setActiveContext', 'setHighLightVariables'],
+              cond: getIsNewContextCond(EditorContext.variables),
+            },
+            {
+              target: '.',
+              actions: ['setActiveContext', 'setHighLightHeaders'],
+              cond: getIsNewContextCond(EditorContext.Headers),
+            },
+            {
+              target: '.',
+              actions: ['setActiveContext', 'setHighLightData'],
+              cond: getIsNewContextCond(EditorContext.data),
+            },
+          ],
+          SET_SELECTED_REQUEST: [
+            {
+              target: '.',
+              actions: [
+                'setExternalContext',
+                'setHighLightQuery',
+                'startPrism',
+              ],
+              cond: getIsContextCond(EditorContext.query),
+            },
+            {
+              target: '.',
+              actions: [
+                'setExternalContext',
+                'setHighLightVariables',
+                'startPrism',
+              ],
+              cond: getIsContextCond(EditorContext.variables),
+            },
+            {
+              target: '.',
+              actions: [
+                'setExternalContext',
+                'setHighLightHeaders',
+                'startPrism',
+              ],
+              cond: getIsContextCond(EditorContext.Headers),
+            },
+            {
+              target: '.',
+              actions: ['setExternalContext', 'setHighLightData', 'startPrism'],
+              cond: getIsContextCond(EditorContext.data),
+            },
+          ],
           COPY_CONTEXT: 'copyingContext',
           REFETCH_OPERATION: 'refetchingOperation',
         },

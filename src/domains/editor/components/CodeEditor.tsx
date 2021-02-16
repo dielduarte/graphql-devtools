@@ -70,10 +70,10 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
     (editorContext: EditorContext) => () => {
       send({
         type: 'SET_ACTIVE_CONTEXT',
-        payload: { editorContext },
+        payload: { editorContext, selectedRequest, requestMetaDataById },
       });
     },
-    [send],
+    [send, selectedRequest, requestMetaDataById],
   );
 
   useEffect(() => {
@@ -86,7 +86,10 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
   return (
     <Editor>
       <Header>
-        <Button active={activeContext === EditorContext.query} onClick={handleSetActiveContext(EditorContext.query)}>
+        <Button
+          active={activeContext === EditorContext.query}
+          onClick={handleSetActiveContext(EditorContext.query)}
+        >
           {isMutation ? 'Mutation' : 'Query'}
         </Button>
         <Button
@@ -101,25 +104,37 @@ function CodeEditor({ selectedRequest, requestMetaDataById }: CodeEditorProps) {
         >
           Headers
         </Button>
-        <Button active={activeContext === EditorContext.data} onClick={handleSetActiveContext(EditorContext.data)}>
+        <Button
+          active={activeContext === EditorContext.data}
+          onClick={handleSetActiveContext(EditorContext.data)}
+        >
           Data
         </Button>
 
         <Divider />
 
         <Tip content={isMutation ? 'Refetch mutation' : 'Refetch query'}>
-          <Action onClick={() => send('REFETCH_OPERATION')} active={current.matches('operationRefetchedSuccessfully')}>
+          <Action
+            onClick={() => send('REFETCH_OPERATION')}
+            active={current.matches('operationRefetchedSuccessfully')}
+          >
             <RefetchIcon />
           </Action>
         </Tip>
         <Tip content={`Copy ${activeContext}`}>
-          <Action onClick={() => send('COPY_CONTEXT')} active={current.matches('contextCopiedSuccessfully')}>
+          <Action
+            onClick={() => send('COPY_CONTEXT')}
+            active={current.matches('contextCopiedSuccessfully')}
+          >
             <CopyIcon />
           </Action>
         </Tip>
       </Header>
       <Pre>
-        <code className={'language-graphql'} dangerouslySetInnerHTML={{ __html: highlights[activeContext] }} />
+        <code
+          className={'language-graphql'}
+          dangerouslySetInnerHTML={{ __html: highlights[activeContext] }}
+        />
       </Pre>
     </Editor>
   );

@@ -23,6 +23,8 @@ export interface SET_ACTIVE_CONTEXT {
   type: 'SET_ACTIVE_CONTEXT';
   payload: {
     editorContext: EditorContext;
+    selectedRequest: CoreRequest;
+    requestMetaDataById: CoreRequestMetaData;
   };
 }
 
@@ -30,7 +32,11 @@ export interface REFETCH_OPERATION {
   type: 'REFETCH_OPERATION';
 }
 
-export type CodeEditorEvents = SET_SELECTED_REQUEST | COPY_CONTEXT | SET_ACTIVE_CONTEXT | REFETCH_OPERATION;
+export type CodeEditorEvents =
+  | SET_SELECTED_REQUEST
+  | COPY_CONTEXT
+  | SET_ACTIVE_CONTEXT
+  | REFETCH_OPERATION;
 
 export interface CodeEditorSchema {
   states: {
@@ -48,12 +54,16 @@ export interface CodeEditorContext {
     requestMetaDataById?: CoreRequestMetaData;
   };
   highlights: {
-    query: string;
-    variables: string;
-    headers: string;
-    data: string;
+    query?: string;
+    variables?: string;
+    headers?: string;
+    data?: string;
   };
   activeContext: EditorContext;
 }
 
-export type CodeEditorMachine = MachineConfig<CodeEditorContext, CodeEditorSchema, CodeEditorEvents>;
+export type CodeEditorMachine = MachineConfig<
+  CodeEditorContext,
+  CodeEditorSchema,
+  CodeEditorEvents
+>;
