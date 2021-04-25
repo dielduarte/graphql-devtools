@@ -20,10 +20,11 @@ const Editor = styled('div', {
 const Header = styled('header', {
   position: 'sticky',
   top: 0,
-  background: '$bg1',
+  background: '$bg2',
   padding: '$3',
   display: 'flex',
   alignItems: 'center',
+  maxHeight: '44px',
 
   svg: {
     cursor: 'pointer',
@@ -34,6 +35,7 @@ const Pre = styled('pre', {
   /* margin with important due to primsjs global styles :/ */
   margin: '0 !important',
   padding: '$3',
+  height: '100%',
 });
 
 const Action = styled('button', {

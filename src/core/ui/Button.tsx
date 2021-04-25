@@ -8,7 +8,7 @@ export const Button = styled('button', {
   marginRight: '$3',
   background: 'transparent',
 
-  ':hover': {
+  '&:hover': {
     background: '$secondary',
     color: '$bg4',
     cursor: 'pointer',
@@ -20,7 +20,7 @@ export const Button = styled('button', {
         color: '$white',
         background: '$primary',
 
-        ':hover': {
+        '&:hover': {
           color: '$white',
           background: '$primary',
         },

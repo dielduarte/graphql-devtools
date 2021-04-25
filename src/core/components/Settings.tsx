@@ -23,7 +23,7 @@ const Input = styled('textarea', {
   transition: 'height 0.1s linear',
   lineHeight: '17px',
 
-  ':focus': {
+  '&:focus': {
     height: '100px',
   },
 });

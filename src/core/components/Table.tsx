@@ -42,7 +42,7 @@ const Table = styled('table', {
     background: '$primary',
     color: '$white',
 
-    ':hover': {
+    '&:hover': {
       background: '$primary',
       color: '$white',
     },
@@ -82,7 +82,12 @@ interface TableProps {
   onRequestSelected: (request: CoreRequest) => void;
 }
 
-function TableComponent({ requests, requestsMetaDataById, selectedRequest, onRequestSelected }: TableProps) {
+function TableComponent({
+  requests,
+  requestsMetaDataById,
+  selectedRequest,
+  onRequestSelected,
+}: TableProps) {
   const handleOnRequestSelected = useCallback(
     (request: CoreRequest) => () => {
       onRequestSelected(request);
@@ -101,13 +106,16 @@ function TableComponent({ requests, requestsMetaDataById, selectedRequest, onReq
 
       <tbody>
         {requests.map((request: CoreRequest) => {
-          const { queryName, statusCode, operation } = requestsMetaDataById[request.requestId];
+          const { queryName, statusCode, operation } = requestsMetaDataById[
+            request.requestId
+          ];
           return (
             <tr
               key={request.requestId}
               onClick={handleOnRequestSelected(request)}
               className={classNames({
-                isActive: selectedRequest && compareRequests(request, selectedRequest),
+                isActive:
+                  selectedRequest && compareRequests(request, selectedRequest),
               })}
             >
               <td>

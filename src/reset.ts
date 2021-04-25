@@ -1,6 +1,6 @@
-import { css } from './stitches.config';
+import { global } from './stitches.config';
 
-css.global({
+export default global({
   body: {
     fontFamily: '$roboto',
     margin: 0,
