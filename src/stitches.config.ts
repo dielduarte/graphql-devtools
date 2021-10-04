@@ -1,8 +1,8 @@
-import { createCss } from '@stitches/react';
+import { createStitches } from '@stitches/react';
 
 const getSize = (powValue: number) => `${Math.pow(2, powValue)}px`;
 
-export const { styled, theme, global } = createCss({
+export const { styled, createTheme } = createStitches({
   theme: {
     colors: {
       white: '#FFFFFF',
@@ -51,7 +51,7 @@ export const { styled, theme, global } = createCss({
   },
 });
 
-export const darkThemeClass = theme({
+export const darkThemeClass = createTheme({
   colors: {
     primary: '#3475E0',
     secondary: '#303A43',
