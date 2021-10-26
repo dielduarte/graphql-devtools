@@ -1,4 +1,4 @@
-# WIP
+# Graphql-devtools
 
 The frameworkless graphql devtools, focusing in a good DX
 
