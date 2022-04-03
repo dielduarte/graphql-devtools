@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { Sender, State } from 'xstate';
 import debounce from 'lodash.debounce';
 

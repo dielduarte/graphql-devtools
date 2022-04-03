@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useCallback } from 'react';
+import { memo, useEffect, useCallback } from 'react';
 
 import '../../../styles/prism.css';
 import { useMachine } from '@xstate/react';

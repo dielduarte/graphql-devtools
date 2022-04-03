@@ -1,5 +1,3 @@
-import React from 'react';
-
 import coreMachine from './core/machine';
 import { useMachine } from '@xstate/react';
 import Table from './core/components/Table';
@@ -16,20 +14,20 @@ import { filterOperations } from 'core/_utils/operation';
 function App() {
   const [current, send] = useMachine(coreMachine);
   const { requestsMetaDataById, selectedRequest } = current.context;
-  const filteredRequests = filterOperations(current);
+  const filteredRequests = filterOperations(current as any);
 
   return (
     <>
-      <Header send={send} current={current} />
+      <Header send={send} current={current as any} />
       {current.matches('core.openPreferences') && (
-        <Preferences current={current} send={send} />
+        <Preferences current={current as any} send={send} />
       )}
       <Grid
         Left={
           <>
             <FixedElement>
-              <Settings send={send} current={current} />
-              <Filters send={send} current={current} />
+              <Settings send={send} current={current as any} />
+              <Filters send={send} current={current as any} />
             </FixedElement>
             <Table
               onRequestSelected={(request) =>

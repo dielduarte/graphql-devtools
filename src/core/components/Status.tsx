@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { styled } from 'stitches.config';
 import { ReactComponent as ErrorIcon } from '../../icons/error.svg';
 

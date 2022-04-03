@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sender, State } from 'xstate';
 
 import { styled } from 'stitches.config';
