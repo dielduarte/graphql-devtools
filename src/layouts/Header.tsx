@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { styled } from 'stitches.config';
 import { ReactComponent as GitHubIcon } from '../icons/github.svg';
 import { ReactComponent as GearIcon } from '../icons/gear.svg';
